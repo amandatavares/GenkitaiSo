@@ -15,6 +15,7 @@
 		26302B48299B2656008AB32D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26302B46299B2656008AB32D /* Main.storyboard */; };
 		26302B4A299B2658008AB32D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26302B49299B2658008AB32D /* Assets.xcassets */; };
 		26302B4D299B2658008AB32D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 26302B4B299B2658008AB32D /* LaunchScreen.storyboard */; };
+		98A5E107E2A058AC56676C2F /* Pods_GenkitaiSo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,9 @@
 		26302B47299B2656008AB32D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		26302B49299B2658008AB32D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26302B4C299B2658008AB32D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		48EA2432914D60882EFA73A9 /* Pods-GenkitaiSo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenkitaiSo.debug.xcconfig"; path = "Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo.debug.xcconfig"; sourceTree = "<group>"; };
+		7004FACA9B209E8A249910D4 /* Pods-GenkitaiSo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenkitaiSo.release.xcconfig"; path = "Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo.release.xcconfig"; sourceTree = "<group>"; };
+		B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenkitaiSo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98A5E107E2A058AC56676C2F /* Pods_GenkitaiSo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,6 +50,8 @@
 			children = (
 				26302B3B299B2656008AB32D /* GenkitaiSo */,
 				26302B3A299B2656008AB32D /* Products */,
+				F458DA1AD5AAA856DB933368 /* Pods */,
+				71489237370BEEFCA6EFDB53 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +78,24 @@
 			path = GenkitaiSo;
 			sourceTree = "<group>";
 		};
+		71489237370BEEFCA6EFDB53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F458DA1AD5AAA856DB933368 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				48EA2432914D60882EFA73A9 /* Pods-GenkitaiSo.debug.xcconfig */,
+				7004FACA9B209E8A249910D4 /* Pods-GenkitaiSo.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -78,9 +103,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26302B50299B2658008AB32D /* Build configuration list for PBXNativeTarget "GenkitaiSo" */;
 			buildPhases = (
+				EDE1D320D58E1ECF07D29F87 /* [CP] Check Pods Manifest.lock */,
 				26302B35299B2656008AB32D /* Sources */,
 				26302B36299B2656008AB32D /* Frameworks */,
 				26302B37299B2656008AB32D /* Resources */,
+				DC95BFDD047F9F6CF9FEE7AD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -138,6 +165,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DC95BFDD047F9F6CF9FEE7AD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EDE1D320D58E1ECF07D29F87 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GenkitaiSo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		26302B35299B2656008AB32D /* Sources */ = {
@@ -288,6 +357,7 @@
 		};
 		26302B51299B2658008AB32D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 48EA2432914D60882EFA73A9 /* Pods-GenkitaiSo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -316,6 +386,7 @@
 		};
 		26302B52299B2658008AB32D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7004FACA9B209E8A249910D4 /* Pods-GenkitaiSo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
