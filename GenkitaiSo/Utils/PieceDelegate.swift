@@ -10,5 +10,5 @@ import Foundation
 // see logic
 protocol PieceDelegate: AnyObject {
     //func pieceDidMove(from originIndex: Index, to newIndex: Index)
-    func pieceRemoved(from index: Index)
+    func pieceRemoved(from index: Index) // back to be used
 }

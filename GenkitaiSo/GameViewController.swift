@@ -11,6 +11,10 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    //MARK: - Socket Service Instatiation
+    let socketService: SocketService = SocketService()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

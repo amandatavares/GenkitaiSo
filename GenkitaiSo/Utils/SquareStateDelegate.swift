@@ -8,7 +8,7 @@
 import Foundation
 
 // old TriangleStateDelegate
-protocol BoardSquareDelegate: AnyObject {
+protocol SquareStateDelegate: AnyObject {
     func didSelect(index: Index)
     func didUnselect(index: Index)
 }

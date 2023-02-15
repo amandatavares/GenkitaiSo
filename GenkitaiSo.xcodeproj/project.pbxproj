@@ -23,7 +23,9 @@
 		26302B62299B2AA7008AB32D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B61299B2AA7008AB32D /* Message.swift */; };
 		26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B64299B2B50008AB32D /* BoardDelegate.swift */; };
 		26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B66299B2B72008AB32D /* PieceDelegate.swift */; };
-		26302B69299B2BC4008AB32D /* BoardSquareDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B68299B2BC4008AB32D /* BoardSquareDelegate.swift */; };
+		26302B69299B2BC4008AB32D /* SquareStateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B68299B2BC4008AB32D /* SquareStateDelegate.swift */; };
+		26302B6C299BB00B008AB32D /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B6B299BB00B008AB32D /* SocketService.swift */; };
+		267382EC299D0E4000E9CC30 /* SquareState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267382EB299D0E4000E9CC30 /* SquareState.swift */; };
 		98A5E107E2A058AC56676C2F /* Pods_GenkitaiSo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,7 +47,9 @@
 		26302B61299B2AA7008AB32D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		26302B64299B2B50008AB32D /* BoardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardDelegate.swift; sourceTree = "<group>"; };
 		26302B66299B2B72008AB32D /* PieceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceDelegate.swift; sourceTree = "<group>"; };
-		26302B68299B2BC4008AB32D /* BoardSquareDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardSquareDelegate.swift; sourceTree = "<group>"; };
+		26302B68299B2BC4008AB32D /* SquareStateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareStateDelegate.swift; sourceTree = "<group>"; };
+		26302B6B299BB00B008AB32D /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
+		267382EB299D0E4000E9CC30 /* SquareState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareState.swift; sourceTree = "<group>"; };
 		48EA2432914D60882EFA73A9 /* Pods-GenkitaiSo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenkitaiSo.debug.xcconfig"; path = "Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo.debug.xcconfig"; sourceTree = "<group>"; };
 		7004FACA9B209E8A249910D4 /* Pods-GenkitaiSo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenkitaiSo.release.xcconfig"; path = "Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo.release.xcconfig"; sourceTree = "<group>"; };
 		B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenkitaiSo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +90,7 @@
 			children = (
 				26302B63299B2B3D008AB32D /* Utils */,
 				26302B3C299B2656008AB32D /* AppDelegate.swift */,
+				26302B6A299BAFF3008AB32D /* Service */,
 				26302B53299B28F6008AB32D /* Model */,
 				26302B3E299B2656008AB32D /* GameScene.sks */,
 				26302B40299B2656008AB32D /* Actions.sks */,
@@ -111,9 +116,10 @@
 		26302B56299B2998008AB32D /* Specs */ = {
 			isa = PBXGroup;
 			children = (
-				26302B57299B29C4008AB32D /* Piece.swift */,
 				26302B5B299B2A54008AB32D /* Board.swift */,
+				26302B57299B29C4008AB32D /* Piece.swift */,
 				26302B59299B2A1E008AB32D /* Index.swift */,
+				267382EB299D0E4000E9CC30 /* SquareState.swift */,
 			);
 			path = Specs;
 			sourceTree = "<group>";
@@ -130,11 +136,19 @@
 		26302B63299B2B3D008AB32D /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				26302B64299B2B50008AB32D /* BoardDelegate.swift */,
 				26302B66299B2B72008AB32D /* PieceDelegate.swift */,
-				26302B68299B2BC4008AB32D /* BoardSquareDelegate.swift */,
+				26302B68299B2BC4008AB32D /* SquareStateDelegate.swift */,
+				26302B64299B2B50008AB32D /* BoardDelegate.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		26302B6A299BAFF3008AB32D /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				26302B6B299BB00B008AB32D /* SocketService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		71489237370BEEFCA6EFDB53 /* Frameworks */ = {
@@ -275,13 +289,15 @@
 				26302B45299B2656008AB32D /* GameViewController.swift in Sources */,
 				26302B5A299B2A1E008AB32D /* Index.swift in Sources */,
 				26302B62299B2AA7008AB32D /* Message.swift in Sources */,
-				26302B69299B2BC4008AB32D /* BoardSquareDelegate.swift in Sources */,
+				26302B69299B2BC4008AB32D /* SquareStateDelegate.swift in Sources */,
 				26302B58299B29C4008AB32D /* Piece.swift in Sources */,
+				267382EC299D0E4000E9CC30 /* SquareState.swift in Sources */,
 				26302B5C299B2A54008AB32D /* Board.swift in Sources */,
 				26302B5F299B2A98008AB32D /* Chat.swift in Sources */,
 				26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */,
 				26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */,
 				26302B3D299B2656008AB32D /* AppDelegate.swift in Sources */,
+				26302B6C299BB00B008AB32D /* SocketService.swift in Sources */,
 				26302B55299B2904008AB32D /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
