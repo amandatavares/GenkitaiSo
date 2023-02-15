@@ -13,7 +13,11 @@ class GameViewController: UIViewController {
 
     //MARK: - View Outlets
     @IBOutlet weak var skView: SKView!
-    
+    @IBOutlet weak var playerNameLabel: UILabel!
+    @IBOutlet weak var stateMessageLabel: UILabel!
+    @IBOutlet weak var chatTextView: UITextView!
+    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var textField: UITextField!
     
     //MARK: - Socket Service Instatiation
     let socketService: SocketService = SocketService()
