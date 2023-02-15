@@ -102,7 +102,7 @@ class GameViewController: UIViewController {
         
         
 //             Load the SKScene from 'GameScene.sks'
-        if let scene = SKScene(fileNamed: "GameScene") {
+        if let scene = GKScene(fileNamed: "GameScene") {
             if let sceneNode = scene.rootNode as! GameScene? {
                 sceneNode.board.delegate = self
                 
@@ -186,7 +186,7 @@ extension GameViewController: UITextFieldDelegate {
 extension GameViewController: GameDelegate {
     
     func didStart() {
-        if gameScene.player == .left {
+        if gameScene.player == .leftPlayer {
             state = .yourTurn
         } else {
             state = .waiting
