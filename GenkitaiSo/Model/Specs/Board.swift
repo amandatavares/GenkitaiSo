@@ -103,8 +103,10 @@ class Board {
     private func placePiece(at square: SquareState, captain: Bool = false) {}
     func setup(numberOfRows: Int) {}
     func createRow(number i: Int, amountOfElements e: Int, backoff: Int, beginsWithReversed: Bool = false) {}
-    func getSquare(atScreenPoint point: CGPoint) -> SquareState? {}
-    func getPiece(at index: Index) -> Piece? {}
+
+    //    func getSquare(atScreenPoint point: CGPoint) -> SquareState? {}
+    //    func getPiece(at index: Index) -> Piece? {}
+    
 //    func turnOnMasks(for moves: [Square?], at piece: Piece) {}
 //    func createMoveMask(square: Square) {}
     func movePiece(from originIndex: Index, to newIndex: Index) {}
@@ -126,7 +128,7 @@ extension Board: SquareStateDelegate {
     }
     
     func didUnselect(index: Index) {
-        <#code#>
+//        
     }
     
 }

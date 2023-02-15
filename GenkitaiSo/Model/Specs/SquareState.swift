@@ -15,7 +15,6 @@ class SquareState {
     let type: Player
     let bgColor: UIColor!
     let pieceColor: UIColor!
-    let captainColor: UIColor!
     
     private enum CodingKeys: String, CodingKey {
         case position
@@ -25,16 +24,14 @@ class SquareState {
         self.index = position
         self.type = type
         self.setColorHandler = colorHandler
-//        
-//        if type == .pointBottom {
-//            self.bgColor = Colors.trianglePointDown.color
-//            self.pieceColor = Colors.playerBottom.color
-//            self.captainColor = Colors.playerBottomCaptain.color
-//        } else {
-//            self.bgColor = Colors.trianglePointUp.color
-//            self.pieceColor = Colors.playerTop.color
-//            self.captainColor = Colors.playerTopCaptain.color
-//        }
+        
+        if type == .leftPlayer {
+            self.bgColor = .white
+            self.pieceColor = .red
+        } else {
+            self.bgColor = .black
+            self.pieceColor = .blue
+        }
     }
     
     private(set) var isEmpty: Bool = true {
@@ -78,12 +75,6 @@ class SquareState {
         self.hasPiece = true
         //setColorHandler?(pieceColor)
         //delegate.didSetPiece(triangle: self)
-    }
-    
-    func setCaptain() {
-        self.hasCaptain = true
-        setColorHandler?(captainColor)
-        //delegate.didSetCaptain(triangle: self)
     }
     
     func setEmpty() {
