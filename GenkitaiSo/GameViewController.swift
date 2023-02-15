@@ -11,6 +11,10 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    //MARK: - View Outlets
+    @IBOutlet weak var skView: SKView!
+    
+    
     //MARK: - Socket Service Instatiation
     let socketService: SocketService = SocketService()
     
