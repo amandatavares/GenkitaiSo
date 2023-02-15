@@ -14,7 +14,6 @@ class Piece {
     
     var node: SKShapeNode
     let type: Player
-//    var isCaptain: Bool
     var index: Index
     var possibleMoves: [Index] = []
     
@@ -47,4 +46,5 @@ class Piece {
         delegate?.pieceRemoved(from: index)
     }
     
+}
 }
