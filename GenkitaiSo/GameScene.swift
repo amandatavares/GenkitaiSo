@@ -24,13 +24,16 @@ class GameScene: SKScene {
         //Setup Board
         self.board = Board(amountOfRows: 6, scale: 33, originY: 333)
         self.addChild(board.tileMap)
+        print(board.tileMap.anchorPoint)
+        print(board.tileMap.position)
+        print(board.tileMap.mapSize)
     }
     
     func touchDown(atPoint point: CGPoint) {
         
-        if player == .disconnected {
-            return
-        }
+//        if player == .disconnected {
+//            return
+//        }
         
         // David's code to touch
 //        //get triangle at touch point

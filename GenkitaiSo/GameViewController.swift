@@ -23,37 +23,37 @@ class GameViewController: UIViewController {
     let socketService: SocketService = SocketService()
     
     //MARK: - Custom Alert
-    lazy var stateView: UIView = {
-//        let view = UIView(frame: self.skView.frame)
-//        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
-        stateView.layer.zPosition = -10
-        return view
-    }()
-    
+//    lazy var stateView: UIView = {
+////        let view = UIView(frame: self.skView.frame)
+////        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+//        stateView.layer.zPosition = -10
+//        return view
+//    }()
+//
     //MARK: - GameState
 //    awaitingConnection
-    var state: GameState! = .yourTurn {
-        didSet {
-            self.stateMessageLabel.text = state.rawValue
-            switch state {
-            case .yourTurn:
-                dismissStateView()
-            default:
-//                showStateView()
-                dismissStateView()
-
-            } //uncomment when Socket done
-        }
-    }
+//    var state: GameState! = .yourTurn {
+//        didSet {
+//            self.stateMessageLabel.text = state.rawValue
+//            switch state {
+//            case .yourTurn:
+//                dismissStateView()
+//            default:
+////                showStateView()
+//                dismissStateView()
+//
+//            } //uncomment when Socket done
+//        }
+//    }
     
     //MARK: - State View
-    func showStateView() {
-        self.view.addSubview(stateView)
-    }
-    
-    func dismissStateView() {
-        stateView.removeFromSuperview()
-    }
+//    func showStateView() {
+//        self.view.addSubview(stateView)
+//    }
+//
+//    func dismissStateView() {
+//        stateView.removeFromSuperview()
+//    }
     
     
     //MARK: - GameScene Cast
@@ -132,7 +132,7 @@ class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        showStateView()
+//        showStateView()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -191,10 +191,11 @@ extension GameViewController: GameDelegate {
     
     func didStart() {
         if gameScene.player == .leftPlayer {
-            state = .yourTurn
+//            state = .yourTurn
+            print("Your turn")
         } else {
-            state = .yourTurn
 //            state = .waiting
+            print("Waiting")
         }
     }
     
@@ -207,10 +208,11 @@ extension GameViewController: GameDelegate {
         self.gameScene.board.previousPos = nil
         
         if name == gameScene.player.rawValue {
-            state = .yourTurn
+//            state = .yourTurn
+            print("Your turn")
         } else {
 //            state = .waiting //uncomment when socket
-            state = .yourTurn
+            print("Waiting")
         }
     }
     

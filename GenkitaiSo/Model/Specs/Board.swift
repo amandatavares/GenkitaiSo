@@ -113,9 +113,9 @@ class Board {
         
         tileSet = SKTileSet(tileGroups: [whiteTileGroup], tileSetType: .grid)
         
-//        let tileSize = tileSet.defaultTileSize // from image size
+        let tileSize = tileSet.defaultTileSize // from image size
 
-        let tileSize = CGSize(width: 100, height: 100)
+//        let tileSize = CGSize(width: 30, height: 30)
         
         tileMap = SKTileMapNode(tileSet: tileSet, columns: numberOfRows, rows: numberOfRows, tileSize: tileSize)
         let tileGroup = tileSet.tileGroups.first
