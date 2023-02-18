@@ -23,7 +23,7 @@ class GameScene: SKScene {
         
         //Setup Board
         self.board = Board(amountOfRows: 6, scale: 33, originY: 333)
-        self.addChild(board.node)
+        self.addChild(board.tileMap)
     }
     
     func touchDown(atPoint point: CGPoint) {

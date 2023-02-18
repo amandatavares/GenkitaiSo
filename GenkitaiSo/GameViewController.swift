@@ -24,21 +24,25 @@ class GameViewController: UIViewController {
     
     //MARK: - Custom Alert
     lazy var stateView: UIView = {
-        let view = UIView(frame: self.skView.frame)
-        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+//        let view = UIView(frame: self.skView.frame)
+//        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+        stateView.layer.zPosition = -10
         return view
     }()
     
     //MARK: - GameState
-    var state: GameState! = .awaitingConnection {
+//    awaitingConnection
+    var state: GameState! = .yourTurn {
         didSet {
             self.stateMessageLabel.text = state.rawValue
             switch state {
             case .yourTurn:
                 dismissStateView()
             default:
-                showStateView()
-            }
+//                showStateView()
+                dismissStateView()
+
+            } //uncomment when Socket done
         }
     }
     
@@ -189,7 +193,8 @@ extension GameViewController: GameDelegate {
         if gameScene.player == .leftPlayer {
             state = .yourTurn
         } else {
-            state = .waiting
+            state = .yourTurn
+//            state = .waiting
         }
     }
     
@@ -204,7 +209,8 @@ extension GameViewController: GameDelegate {
         if name == gameScene.player.rawValue {
             state = .yourTurn
         } else {
-            state = .waiting
+//            state = .waiting //uncomment when socket
+            state = .yourTurn
         }
     }
     
