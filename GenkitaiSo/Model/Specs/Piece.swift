@@ -8,11 +8,6 @@
 import Foundation
 import SpriteKit
 
-//enum Color: UIColor {
-//    case top = UIColor.PieceColor.top //yellow
-//    case bottom = UIColor.PieceColor.bottom //dark
-//}
-
 class Piece {
     weak var delegate: PieceDelegate?
     
@@ -65,18 +60,5 @@ class Piece {
 //        delegate?.pieceRemoved(from: pieceIndex)
     }
     
-    func find(from pos: Position, in pieces: [Piece]?) -> Piece? { //review
-        // buscar piece que ta no index (no pieces)
-        for piece in pieces where piece.node.position.x == pos.x && piece.node.position.y == pos.y {
-            return piece
-        }
-        return nil
-    }
-    
-    func move(from origin: Position, to new: Position) {
-        if let piece = find(from: origin) {
-            piece.node.position = CGPoint(x: new.x, y: new.y)
-        }
-    }
-    
+
 }

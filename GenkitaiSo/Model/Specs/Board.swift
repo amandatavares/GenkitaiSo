@@ -19,6 +19,7 @@ class Board {
     
     var tileSet: SKTileSet!
     var tileMap: SKTileMapNode!
+    var numberOfRows = 0
     
 //    private var currentNode: SKNode?
     
@@ -28,34 +29,9 @@ class Board {
     var originTopPositions: [Position] = []
     var originBottomPositions: [Position] = []
     
-//    REDO: gameover logic
-//    var amountDeadTop: Int = 0 {
-//        didSet {
-//            if amountDeadTop > 1 {
-//                delegate.gameOver(winner: .pointBottom)
-//            }
-//        }
-//    }
-//    var amountDeadBottom: Int = 0 {
-//        didSet {
-//            if amountDeadBottom > 1 {
-//                delegate.gameOver(winner: .pointTop)
-//            }
-//        }
-//    }
-    
-    var hasMoved: Bool = false
-    var previousPos: Index?
-    var newPos: Index?
-    
-
-    func getSquare(at index: Position) -> Square? {
-//        if index.row >= 0, index.column >= 0, index.row < rowsNodes.count, index.column < rowsNodes[index.row].count {
-//            return Square(node: rowsNodes[index.row][index.column], data: rowsData[index.row][index.column])
-//        }
-        print("reform")
-        return nil
-    }
+    var selectedNode: SKNode?
+    var previousPos: Position?
+    var newPos: Position?
     
 
     init(numberOfRows x: Int) {
@@ -64,6 +40,7 @@ class Board {
     }
     
     func setup(numberOfRows: Int) {
+        self.numberOfRows = numberOfRows
         let texture = SKTexture(imageNamed: "tile")
         
         let tile = SKTileDefinition(texture: texture)
@@ -114,11 +91,60 @@ class Board {
         }
     }
     
-//    func getPiece(at index: Position) -> Piece? {
-//        return pieces.filter { $0.index == index }.first
-//    }
+    func getCenterTile(atPoint pos: CGPoint) -> CGPoint {
+        let axis = getAxisTile(atPoint: pos)
+        let center = self.tileMap.centerOfTile(atColumn: axis.0, row: axis.1)
+        return center
+    }
     
-//    func verifyDeadPieces() {}
+    func getAxisTile(atPoint pos: CGPoint) -> (Int, Int) {
+        let column = self.tileMap.tileColumnIndex(fromPosition: pos)
+        let row = self.tileMap.tileRowIndex(fromPosition: pos)
+        return (column: column, row: row)
+    }
+    
+    func findPiece(from pos: Position) -> Piece? { 
+        for piece in pieces where piece.node.position.x == pos.x && piece.node.position.y == pos.y {
+            return piece
+        }
+        return nil
+    }
+    
+    func movePiece(from origin: Position, to new: Position) { //fix it
+        if let piece = findPiece(from: origin) {
+            piece.node.position = CGPoint(x: new.x, y: new.y)
+        }
+    }
+    
+    func centerPiece(node: SKNode, at pos: CGPoint) {
+        let column = self.getAxisTile(atPoint: pos).0
+        let row =  self.getAxisTile(atPoint: pos).1
+        let center = self.getCenterTile(atPoint: pos)
+        
+        let nodesInCenter = tileMap.nodes(at: center)
+            //se o node estiver fora do tabuleiro 6x6 (0 ate 5)
+        if column < 0 || column > self.numberOfRows-1 || row < 0 || row > self.numberOfRows-1 {
+                for piece in pieces where piece.node == node {
+                    node.position = CGPoint(x: piece.index.x, y: piece.index.y)
+                    self.newPos = Position(x: piece.index.x, y: piece.index.y)
+                }
+            } else {
+                // se existir mais que um node na posição, volta para a posição anterior
+                if nodesInCenter.count > 1 && nodesInCenter.contains(node) {
+                    node.position = CGPoint(x: previousPos!.x, y: previousPos!.y)
+                    self.newPos = Position(x: previousPos!.x, y: previousPos!.y)
+                } else if nodesInCenter.count >= 1 && !nodesInCenter.contains(node) {
+                    node.position = CGPoint(x: previousPos!.x, y: previousPos!.y)
+                    self.newPos = Position(x: previousPos!.x, y: previousPos!.y)
+                
+                } else {
+                    node.position = center
+                    self.newPos = Position(x: center.x, y: center.y)
+                }
+            }
+        self.currentMoves.append(Move(previousPos: self.previousPos!, newPos: self.newPos!))
+    }
+
     
 }
 
