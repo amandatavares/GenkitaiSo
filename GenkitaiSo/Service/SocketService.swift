@@ -63,7 +63,7 @@ class SocketService {
     }
     
     func exitPlayer(player: String) {
-        self.socket.emit("exitUser", player)
+        self.socket.emit("userExitUpdate", player)
     }
     
     func move(from origin: Position, to new: Position) {
