@@ -14,8 +14,8 @@ enum Player: String {
 }
 
 enum GameResult {
-    case leftWin
-    case rightWin
+    case topWin
+    case bottomWin
 }
 
 enum GameState: String {

@@ -20,6 +20,10 @@ class GameViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var giveUpButton: UIButton!
     
+    @IBOutlet weak var chatView: UIView!
+    @IBOutlet weak var sendChatView: UIView!
+    @IBOutlet weak var chatStackView: UIStackView!
+    
     //MARK: - Socket Service Instatiation
     let socketService: SocketService = SocketService()
     var chat = Chat()
@@ -98,9 +102,8 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         self.stateMessageLabel.text = GameState.awaitingConnection.rawValue
-        
-        let image = UIImage(systemName: "flag.fill")
-        self.giveUpButton.imageView?.image = image
+      
+        self.customizeViews()
         
         self.chatTableView.dataSource = self
         self.chatTableView.delegate = self
@@ -112,7 +115,8 @@ class GameViewController: UIViewController {
             if let sceneNode = scene.rootNode as! GameScene? {
                 sceneNode.board.delegate = self
                 
-                sceneNode.backgroundColor = self.view.backgroundColor!
+                sceneNode.backgroundColor = UIColor(named: "gameBackground") ?? self.view.backgroundColor!
+                sceneNode.view?.layer.cornerRadius = 20
                 
                 // Copy gameplay related content over to the scene
                 sceneNode.entities = scene.entities
@@ -181,6 +185,17 @@ class GameViewController: UIViewController {
         socketService.restart()
         viewDidLoad()
         viewDidAppear(true)
+    }
+    
+    func customizeViews() {
+        
+        let image = UIImage(systemName: "flag.fill")
+        self.giveUpButton.imageView?.image = image
+        self.chatView.layer.cornerRadius = 20
+        self.sendChatView.layer.cornerRadius = 20
+        self.chatStackView.layer.cornerRadius = 20
+        self.textField.backgroundColor = UIColor(named: "background")
+        
     }
 }
 

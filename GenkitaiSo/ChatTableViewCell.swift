@@ -18,18 +18,4 @@ class ChatTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-//    override func setSelected(_ selected: Bool, animated: Bool) {
-//        super.setSelected(selected, animated: animated)
-//
-//        // Configure the view for the selected state
-//    }
-
 }
-//
-//// Reuse or create a cell.
-//   let cell = tableView.dequeueReusableCell(withIdentifier: "basicStyle", for: indexPath)
-//
-//   // For a standard cell, use the UITableViewCell properties.
-//   cell.textLabel!.text = "Title text"
-//   cell.imageView!.image = UIImage(named: "bunny")
-//   return cell
