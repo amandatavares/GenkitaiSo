@@ -8,8 +8,6 @@
 import Foundation
 
 class Chat {
-    
     var onlinePlayers: [Player] = []
     var messages: [Message] = []
-    
 }

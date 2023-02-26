@@ -8,43 +8,75 @@
 import Foundation
 import SpriteKit
 
+//enum Color: UIColor {
+//    case top = UIColor.PieceColor.top //yellow
+//    case bottom = UIColor.PieceColor.bottom //dark
+//}
+
 class Piece {
-    
     weak var delegate: PieceDelegate?
     
     var node: SKShapeNode
     let type: Player
     var index: Position
     var initialPosition: [Position] = []
-    var currentPosition: [Move] = []
     
-    init(color: UIColor, position: CGPoint, index: Position, type: Player) {
+//    let xOrigin: Double
+//    let yOrigin: Double
+//    var currentPosition: [Move] = []
+    
+    init(index: Position, type: Player) {
         
         self.type = type
         self.index = index
         
-        let piece = SKShapeNode(circleOfRadius: 15)
-        piece.fillColor = color
-        piece.lineWidth = 0
-        piece.zPosition = 3
-        piece.position = position
+        let piece = SKShapeNode(circleOfRadius: 20)
+//        piece.fillColor = color
+        piece.position = CGPoint(x: index.x, y: index.y)
+        piece.name = "piece"
         
-        let shadow = SKShapeNode(circleOfRadius: 15)
-        shadow.fillColor = UIColor(white: 0.1, alpha: 0.2)
-        shadow.lineWidth = 0
-        shadow.zPosition = 2
-        shadow.position = CGPoint(x: position.x - 3, y: position.y - 5)
+        if type == .playerBottom {
+            piece.fillColor = UIColor.PieceColor.bottom //dark
+        } else {
+            piece.fillColor = UIColor.PieceColor.top //yellow
+        }
         
-        let node = SKShapeNode()
-        node.addChild(shadow)
-        node.addChild(piece)
+//        let shadow = SKShapeNode(circleOfRadius: 15)
+//        shadow.fillColor = UIColor(white: 0.1, alpha: 0.2)
+//        shadow.lineWidth = 0
+//        shadow.zPosition = 2
+//        shadow.position = CGPoint(x: position.x - 3, y: position.y - 5)
+//
+//        let node = SKShapeNode()
+//        node.addChild(shadow)
         
-        self.node = node
+//        node.addChild(piece) // important to review
+        
+
+//        self.pieces.append(Piece(node: circle, xOrigin: x, yOrigin: y, color: colorPiece))
+        self.node = piece
+        
     }
     
-    func removeFromBoard() {
-        self.node.removeFromParent()
-        delegate?.pieceRemoved(from: index)
+    func remove(from origin: Piece) {
+        origin.node.removeFromParent()
+//        guard let pieceIndex = pieces.firstIndex(of: origin) else { return }
+//        pieces.remove(at: pieceIndex)
+//        delegate?.pieceRemoved(from: pieceIndex)
+    }
+    
+    func find(from pos: Position, in pieces: [Piece]?) -> Piece? { //review
+        // buscar piece que ta no index (no pieces)
+        for piece in pieces where piece.node.position.x == pos.x && piece.node.position.y == pos.y {
+            return piece
+        }
+        return nil
+    }
+    
+    func move(from origin: Position, to new: Position) {
+        if let piece = find(from: origin) {
+            piece.node.position = CGPoint(x: new.x, y: new.y)
+        }
     }
     
 }

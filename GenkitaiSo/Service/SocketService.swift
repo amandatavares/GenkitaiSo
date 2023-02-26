@@ -19,7 +19,7 @@ protocol GameDelegate: AnyObject {
     
     func receivedMessage(name: String, msg: String, hour: String)
     
-    func youArePlayingAt(_ team: String)
+    func youArePlayingAt(_ team: String) //yourPlayer
 }
 
 
@@ -27,7 +27,7 @@ class SocketService {
     
     let manager: SocketManager
     let socket: SocketIOClient
-    var name: String!
+    var name: String! //player
     
     weak var delegate: GameDelegate! {
         didSet {
@@ -50,20 +50,25 @@ class SocketService {
         socket.connect()
     }
     
+    func giveUp() { //surrender - need to add on server
+        self.socket.emit("giveUp", name)
+    }
+    
     func conectPlayer() {
         self.socket.emit("ctUser")
     }
     
+    func newTurn() {
+        self.socket.emit("newTurn", name)
+    }
+    
     func exitPlayer(player: String) {
-        self.socket.emit("exitUser", player)
+        self.socket.emit("exitUser", name)
     }
     
     func move(from origin: Position, to new: Position) {
         self.socket.emit("playerMove", name, origin.x, origin.y, new.x, new.y)
     }
-//    func move(from originIndex: Index, to newIndex: Index) {
-//        self.socket.emit("playerMove", originIndex.row, originIndex.column, newIndex.row, newIndex.column)
-//    }
     
     func gameOver(winner: Player) {
         self.socket.emit("gameOver", winner.rawValue)
@@ -87,7 +92,7 @@ class SocketService {
         
         socket.on(clientEvent: .disconnect) { [weak self] data, ack in
             self?.name = ""
-            self?.delegate?.youArePlayingAt("")
+            self?.delegate.youArePlayingAt("")
         }
         
         socket.on("uList") { [weak self] data, ack -> Void in

@@ -12,123 +12,82 @@ class GameScene: SKScene {
     
     var entities = [GKEntity]()
     var graphs = [String : GKGraph]()
-    
-    var lastUpdateTime : TimeInterval = 0
 
     var board: Board!
     var player: Player = .disconnected
-    var pieces: [Piece] = []
+//    var pieces: [Piece] = [] //inside Board
+    
+    private var selectedNode: SKNode?
+    var previousPos: Position?
+    var newPos: Position?
     
     override func sceneDidLoad() {
-        self.lastUpdateTime = 0
         
         //Setup Board
-        self.board = Board(amountOfRows: 6, scale: 33, originY: 333)
+        self.board = Board(numberOfRows: 6)
         self.addChild(board.tileMap)
         print(board.tileMap.anchorPoint)
         print(board.tileMap.position)
         print(board.tileMap.mapSize)
     }
     
-    func touchDown(atPoint point: CGPoint) {
-        
-//        if player == .disconnected {
-//            return
-//        }
-        
-        // David's code to touch
-//        //get triangle at touch point
-//        guard let touchedTriangleData = board.getTriangle(atScreenPoint: point) else { return }
-//
-//        if player == touchedTriangleData.type {
-//            //verify if there is any piece selected
-//            if let selectedTriangle = board.getSelectedTriangle(),
-//                let pieceAtSelectedTriangle = board.getPiece(at: selectedTriangle.data.index) {
-//
-//                //verify if touch was in possibleMoves
-//                if pieceAtSelectedTriangle.possibleMoves.contains(touchedTriangleData.index) {
-//                    board.movePiece(from: pieceAtSelectedTriangle.index, to: touchedTriangleData.index)
-//                } else {
-//                    selectedTriangle.data.deselect()
-//                }
-//
-//            } else {
-//                // No selected triangle, select it!
-//                if touchedTriangleData.hasPiece {
-//                    touchedTriangleData.select()
-//                }
-//            }
-//
-//        }
-        
-    }
-    
-    func touchUp(atPoint point: CGPoint) {
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        if let touch = touches.first {
+            let location = touch.location(in: self)
+            let touchedNodes = self.nodes(at: location)
+            for node in touchedNodes.reversed() {
+                if node.name == "piece" {
+                    self.selectedNode = node
+                    self.previousPos = Position(x: node.position.x, y: node.position.y)
+                }
+            }
+        }
     }
     
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-//    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first, let node = self.selectedNode {
+            let touchLocation = touch.location(in: self)
+            node.position = touchLocation
+        }
+    }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
         
-//        //centraliza a peça no meio do espaço
-//        if let node = self.currentNode, let touch = touches.first {
-//            
-//            let position = touch.location(in: self)
-//            let column = tileMap.tileColumnIndex(fromPosition: position)
-//            let row = tileMap.tileRowIndex(fromPosition: position)
-//            
-//            if column < 0 || column > 5 || row < 0 || row > 5 {
-//                for piece in pieces where piece.node == node {
-//                    node.position = CGPoint(x: piece.xOrigin, y: piece.yOrigin)
-//                    self.newPos = PositionPiece(x: piece.xOrigin, y: piece.yOrigin)
-//                }
-//            } else {
-//                let center = centerTile(atPoint: position)
-//                node.position = center
-//                self.newPos = PositionPiece(x: center.x, y: center.y)
-//                
-//                
-//            }
-//            
-//            
-//            for i in pieces.indices {
-//                if pieces[i].node == node {
-//                    pieces[i].currentPosition.append(Move(previousPos: self.previousPos!, newPos: self.newPos!))
-//                }
-//            }
-//            
-//            
-//        }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-        
-        // Initialize _lastUpdateTime if it has not already been
-        if (self.lastUpdateTime == 0) {
-            self.lastUpdateTime = currentTime
+        //centraliza a peça no meio do espaço
+        if let node = self.selectedNode, let touch = touches.first {
+            
+            //Apartir da posição do node encontra linha e coluna
+            let position = touch.location(in: self)
+            let column = self.board.tileMap.tileColumnIndex(fromPosition: position)
+            let row =  self.board.tileMap.tileRowIndex(fromPosition: position)
+            let center = centerTile(atPoint: position)
+            
+            let nodesInCenter = tileMap.nodes(at: center)
+                //se o node estiver fora do tabuleiro 6x6 (0 ate 5)
+                if column < 0 || column > 5 || row < 0 || row > 5 {
+                    for piece in pieces where piece.node == node {
+                        node.position = CGPoint(x: piece.xOrigin, y: piece.yOrigin)
+                        self.newPos = Position(x: piece.xOrigin, y: piece.yOrigin)
+                    }
+                } else {
+                    // se existir mais que um node na posição, volta para a posição anterior
+                    if nodesInCenter.count > 1 && nodesInCenter.contains(node) {
+                        node.position = CGPoint(x: previousPos!.x, y: previousPos!.y)
+                        self.newPos = Position(x: previousPos!.x, y: previousPos!.y)
+                    } else if nodesInCenter.count >= 1 && !nodesInCenter.contains(node) {
+                        node.position = CGPoint(x: previousPos!.x, y: previousPos!.y)
+                        self.newPos = Position(x: previousPos!.x, y: previousPos!.y)
+                    
+                    } else {
+                        node.position = center
+                        self.newPos = Position(x: center.x, y: center.y)
+                    }
+                }
+            movesPices.append(Move(previousPos: self.previousPos!, newPos: self.newPos!))
         }
-        
-        // Calculate time since last update
-        let dt = currentTime - self.lastUpdateTime
-        
-        // Update entities
-        for entity in self.entities {
-            entity.update(deltaTime: dt)
-        }
-        
-        self.lastUpdateTime = currentTime
+        //Finaliza a movimentação do drag and drop
+        self.selectedNode = nil
     }
     
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum Player: String {
     case disconnected = ""
@@ -26,4 +27,9 @@ enum GameState: String {
     case youLose = "You've lost!"
 }
 
-
+extension UIColor {
+  struct PieceColor {
+      static var top: UIColor  { return UIColor(named: "pieceTop") ?? .yellow }
+      static var bottom: UIColor { return UIColor(named: "pieceBottom") ?? .blue }
+  }
+}

@@ -29,37 +29,34 @@ class GameViewController: UIViewController {
     var chat = Chat()
 
     //MARK: - Custom Alert
-//    lazy var stateView: UIView = {
-////        let view = UIView(frame: self.skView.frame)
-////        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
-//        stateView.layer.zPosition = -10
-//        return view
-//    }()
-//
+    lazy var stateView: UIView = {
+        let view = UIView(frame: self.skView.frame)
+        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
+        return view
+    }()
+
     //MARK: - GameState
-//    awaitingConnection
-//    var state: GameState! = .yourTurn {
-//        didSet {
-//            self.stateMessageLabel.text = state.rawValue
-//            switch state {
-//            case .yourTurn:
-//                dismissStateView()
-//            default:
-////                showStateView()
-//                dismissStateView()
-//
-//            } //uncomment when Socket done
-//        }
-//    }
+
+    var state: GameState! = .yourTurn {
+        didSet {
+            self.stateMessageLabel.text = state.rawValue
+            switch state {
+            case .yourTurn:
+                dismissStateView()
+            default:
+                showStateView()
+            }
+        }
+    }
     
     //MARK: - State View
-//    func showStateView() {
-//        self.view.addSubview(stateView)
-//    }
-//
-//    func dismissStateView() {
-//        stateView.removeFromSuperview()
-//    }
+    func showStateView() {
+        self.view.addSubview(stateView)
+    }
+
+    func dismissStateView() {
+        stateView.removeFromSuperview()
+    }
     
     
     //MARK: - GameScene Cast
@@ -71,7 +68,7 @@ class GameViewController: UIViewController {
     @IBAction func sendAction(_ sender: UIButton) {
 //        if playerIsConnected() {
 //        if let content = self.textField.text, content.replacingOccurrences(of: " ", with: "") != "" {
-        socketService.sendMessage(author: "fodida", content: self.textField.text ?? "?")
+        socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
         self.textField.text?.removeAll()
         self.view.endEditing(true)
 //        }
@@ -163,21 +160,18 @@ class GameViewController: UIViewController {
     
     @IBAction func didFinishedTurn(_ sender: Any) {
         print("clicked finish turn")
-//        for piece in gameScene.pieces {
-//            var move = piece.currentPosition
-//            self.socketService.move(from: move[0].previous, to: move[0].new)
-//        }
-//        for move in gameScene.movePices {
-//            self.service.move(from: move.previousPos, to: move.newPos)
-//        }
+        for move in gameScene.board.currentMoves {
+            self.socketService.move(from: move.previousPos, to: move.newPos)
+        }
+        self.socketService.newTurn()
     }
     
     @IBAction func didGaveUp(_ sender: Any) {
         print("clicked give up")
         showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
+            self.socketService.giveUp()
             self.restart()
         }
-        
     }
     
     //MARK: - Restart
@@ -199,28 +193,6 @@ class GameViewController: UIViewController {
     }
 }
 
-
-//MARK: - TextFieldDelegate
-extension GameViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        let offsetY = UIScreen.main.bounds.height/2.55 - textField.frame.origin.y
-        UIView.animate(withDuration: 0.25) {
-            self.view.layer.position = CGPoint(x: self.view.layer.position.x, y: self.view.layer.position.y - offsetY)
-        }
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.2) {
-            self.view.layer.position = CGPoint(x: self.view.layer.position.x, y: UIScreen.main.bounds.height/2)
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-    }
-}
-
-
 //MARK: - TableViewDelegate
 extension GameViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -232,13 +204,14 @@ extension GameViewController: UITableViewDataSource, UITableViewDelegate {
         cell.nameLabel.text = self.chat.messages[indexPath.row].author
         cell.messageLabel.text = self.chat.messages[indexPath.row].content
         
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "HH:mm"
-//        dateFormatter.locale = Locale(identifier: "pt_BR")
-//        let serverTime = dateFormatter.date(from:self.chat.messages[indexPath.row].timestamp)!
-//        let time = dateFormatter.string(from: timestamp)
+        let date = self.chat.messages[indexPath.row].timestamp
+        if let index = (date.range(of: ",")?.upperBound) {
+            let time = String(date.suffix(from: index))
+            cell.timeLabel.text = time
+        } else {
+            cell.timeLabel.text = self.chat.messages[indexPath.row].timestamp
+        }
 
-        cell.timeLabel.text = self.chat.messages[indexPath.row].timestamp
         return cell
     }
     
@@ -249,29 +222,26 @@ extension GameViewController: UITableViewDataSource, UITableViewDelegate {
 extension GameViewController: GameDelegate {
     
     func didStart() {
-        if gameScene.player == .playerTop {
-//            state = .yourTurn
+        if gameScene.player == .playerBottom {
+            state = .yourTurn
             print("Your turn")
         } else {
-//            state = .waiting
+            state = .waiting
             print("Waiting")
         }
     }
     
     func newTurn(_ name: String) {
-        
-//        self.gameScene.board.verifyDeadPieces()
-        
-//        self.gameScene.board.hasMoved = false
         self.gameScene.board.newPos = nil
         self.gameScene.board.previousPos = nil
+        self.gameScene.board.currentMoves = []
         
         if name == gameScene.player.rawValue {
-//            state = .yourTurn
-            print("Your turn")
-        } else {
-//            state = .waiting //uncomment when socket
+            state = .waiting //uncomment when socket
             print("Waiting")
+        } else {
+            state = .yourTurn
+            print("Your turn")
         }
     }
     
@@ -308,4 +278,25 @@ extension GameViewController: BoardDelegate {
         socketService.gameOver(winner: winner)
     }
     
+}
+
+
+//MARK: - TextFieldDelegate
+extension GameViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        let offsetY = UIScreen.main.bounds.height/2.55 - textField.frame.origin.y
+        UIView.animate(withDuration: 0.25) {
+            self.view.layer.position = CGPoint(x: self.view.layer.position.x, y: self.view.layer.position.y - offsetY)
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.2) {
+            self.view.layer.position = CGPoint(x: self.view.layer.position.x, y: UIScreen.main.bounds.height/2)
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+    }
 }
