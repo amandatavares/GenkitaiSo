@@ -27,7 +27,7 @@ class SocketService {
     
     let manager: SocketManager
     let socket: SocketIOClient
-    var name: String! //player
+    var player: String! //player
     
     weak var delegate: GameDelegate! {
         didSet {
@@ -36,7 +36,7 @@ class SocketService {
     }
  
     init() {
-        manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress, .forceWebsockets(true)])
+        manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress])
         socket = manager.defaultSocket
         configSocket()
     }
@@ -51,7 +51,7 @@ class SocketService {
     }
     
     func giveUp() { //surrender - need to add on server
-        self.socket.emit("giveUp", name)
+        self.socket.emit("giveUp", player)
     }
     
     func conectPlayer() {
@@ -59,15 +59,15 @@ class SocketService {
     }
     
     func newTurn() {
-        self.socket.emit("newTurn", name)
+        self.socket.emit("newTurn", player)
     }
     
     func exitPlayer(player: String) {
-        self.socket.emit("exitUser", name)
+        self.socket.emit("exitUser", player)
     }
     
     func move(from origin: Position, to new: Position) {
-        self.socket.emit("playerMove", name, origin.x, origin.y, new.x, new.y)
+        self.socket.emit("playerMove", player, origin.x, origin.y, new.x, new.y)
     }
     
     func gameOver(winner: Player) {
@@ -80,10 +80,10 @@ class SocketService {
     
     func configSocket() {
         
-        socket.on("name") { [weak self] data, ack in
+        socket.on("player") { [weak self] data, ack in
             if let name = data[0] as? String {
-                if self?.name == nil {
-                    self?.name = name
+                if self?.player == nil {
+                    self?.player = name
                     self?.delegate?.youArePlayingAt(name)
                 }
                 self?.delegate.receivedMessage(name: "🟢", msg: "Usuário: \(name)", hour: "")
@@ -91,7 +91,7 @@ class SocketService {
         }
         
         socket.on(clientEvent: .disconnect) { [weak self] data, ack in
-            self?.name = ""
+            self?.player = ""
             self?.delegate.youArePlayingAt("")
         }
         

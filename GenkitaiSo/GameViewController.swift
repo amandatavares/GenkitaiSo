@@ -104,7 +104,9 @@ class GameViewController: UIViewController {
         
         self.chatTableView.dataSource = self
         self.chatTableView.delegate = self
+        
         self.socketService.delegate = self
+        
         self.textField.delegate = self
         
 //             Load the SKScene from 'GameScene.sks'
@@ -115,9 +117,6 @@ class GameViewController: UIViewController {
                 sceneNode.backgroundColor = UIColor(named: "gameBackground") ?? self.view.backgroundColor!
                 sceneNode.view?.layer.cornerRadius = 20
                 
-                // Copy gameplay related content over to the scene
-                sceneNode.entities = scene.entities
-                sceneNode.graphs = scene.graphs
                 
                 // Set the scale mode to scale to fit the window
                 sceneNode.scaleMode = .aspectFill
@@ -131,6 +130,9 @@ class GameViewController: UIViewController {
                 skView.showsNodeCount = true
             }
         }
+
+        self.gameScene.board.delegate = self
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -222,7 +224,7 @@ extension GameViewController: UITableViewDataSource, UITableViewDelegate {
 extension GameViewController: GameDelegate {
     
     func didStart() {
-        if gameScene.player == .playerBottom {
+        if self.gameScene.player == .playerBottom {
             state = .yourTurn
             print("Your turn")
         } else {
@@ -264,7 +266,7 @@ extension GameViewController: GameDelegate {
     }
     
     func youArePlayingAt(_ team: String) {
-        gameScene.player = Player(rawValue: team) ?? .disconnected
+        self.gameScene.player = Player(rawValue: team) ?? .disconnected
         
         self.playerNameLabel.text = "You are  "+gameScene.player.rawValue.capitalized
         print("👾 You are player \(gameScene.player.rawValue)")
