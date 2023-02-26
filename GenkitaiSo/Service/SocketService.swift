@@ -12,12 +12,12 @@ protocol GameDelegate: AnyObject {
     func didStart()
 
     func newTurn(_ name: String)
-    func playerDidMove(_ name: String, from originIndex: Index, to newIndex: Index)
+    func playerDidMove(_ name: String, from originIndex: Position, to newIndex: Position)
 
     func didWin()
     func didLose()
     
-    func receivedMessage(_ name: String, msg: String)
+    func receivedMessage(name: String, msg: String, hour: String)
     
     func youArePlayingAt(_ team: String)
 }
@@ -27,7 +27,7 @@ class SocketService {
     
     let manager: SocketManager
     let socket: SocketIOClient
-    var name: String?
+    var name: String!
     
     weak var delegate: GameDelegate! {
         didSet {
@@ -36,9 +36,13 @@ class SocketService {
     }
  
     init() {
-        manager = SocketManager(socketURL: URL(string: "https://ChatServer.amandatvt.repl.co")!, config: [.log(true), .compress]) //doesnt exist yet
+        manager = SocketManager(socketURL: URL(string: "http://localhost:3000")!, config: [.log(true), .compress, .forceWebsockets(true)])
         socket = manager.defaultSocket
         configSocket()
+    }
+    
+    private func start() {
+        socket.connect()
     }
     
     func restart() {
@@ -46,28 +50,38 @@ class SocketService {
         socket.connect()
     }
     
-    private func start() {
-        socket.connect()
+    func conectPlayer() {
+        self.socket.emit("ctUser")
     }
     
-    func move(from originIndex: Index, to newIndex: Index) {
-        self.socket.emit("playerMove", originIndex.row, originIndex.column, newIndex.row, newIndex.column)
+    func exitPlayer(player: String) {
+        self.socket.emit("exitUser", player)
     }
+    
+    func move(from origin: Position, to new: Position) {
+        self.socket.emit("playerMove", name, origin.x, origin.y, new.x, new.y)
+    }
+//    func move(from originIndex: Index, to newIndex: Index) {
+//        self.socket.emit("playerMove", originIndex.row, originIndex.column, newIndex.row, newIndex.column)
+//    }
     
     func gameOver(winner: Player) {
         self.socket.emit("gameOver", winner.rawValue)
     }
     
     func sendMessage(author: String, content: String) {
-        self.socket.emit("chatMessage", content, author)
+        self.socket.emit("chatMessage", author, content)
     }
     
     func configSocket() {
         
         socket.on("name") { [weak self] data, ack in
             if let name = data[0] as? String {
-                self?.name = name
-                self?.delegate?.youArePlayingAt(name)
+                if self?.name == nil {
+                    self?.name = name
+                    self?.delegate?.youArePlayingAt(name)
+                }
+                self?.delegate.receivedMessage(name: "🟢", msg: "Usuário: \(name)", hour: "")
             }
         }
         
@@ -76,20 +90,28 @@ class SocketService {
             self?.delegate?.youArePlayingAt("")
         }
         
+        socket.on("uList") { [weak self] data, ack -> Void in
+            if let name = data[0] as? String {
+                self?.delegate.receivedMessage(name: "🟢", msg: "Usuário: \(name)", hour: "")
+            }
+        }
+        
         socket.on("startGame") { [weak self] data, ack in
             self?.delegate.didStart()
             return
         }
 
-        socket.on("chatMessage") { [weak self] data, ack in
-            if let msg = data[0] as? String, let name = data[1] as? String {
-                self?.delegate.receivedMessage(name, msg: msg)
+        socket.on("newChatMessage") { [weak self] data, ack in
+            if let name = data[0] as? String, let msg = data[1] as? String, let hour = data[2] as? String  {
+                self?.delegate.receivedMessage(name: name, msg: msg, hour: hour)
             }
         }
         
         socket.on("playerMove") { [weak self] data, ack in
-            if let name = data[0] as? String, let originX = data[1] as? Int, let originY = data[2] as? Int, let newX = data[3] as? Int, let newY = data[4] as? Int {
-                self?.delegate.playerDidMove(name, from: Index(row: originX, column: originY), to: Index(row: newX, column: newY))
+            if let name = data[0] as? String, let originX = data[1] as? Double, let originY = data[2] as? Double, let newX = data[3] as? Double, let newY = data[4] as? Double {
+//                self?.delegate.playerDidMove(name, from: Index(row: originX, column: originY), to: Index(row: newX, column: newY))
+                self?.delegate.playerDidMove(name, from: Position(x: originX, y: originY), to: Position(x: newX, y: newY))
+
             }
         }
         

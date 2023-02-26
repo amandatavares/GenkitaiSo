@@ -17,6 +17,7 @@ class GameScene: SKScene {
 
     var board: Board!
     var player: Player = .disconnected
+    var pieces: [Piece] = []
     
     override func sceneDidLoad() {
         self.lastUpdateTime = 0
@@ -75,6 +76,36 @@ class GameScene: SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        
+//        //centraliza a peça no meio do espaço
+//        if let node = self.currentNode, let touch = touches.first {
+//            
+//            let position = touch.location(in: self)
+//            let column = tileMap.tileColumnIndex(fromPosition: position)
+//            let row = tileMap.tileRowIndex(fromPosition: position)
+//            
+//            if column < 0 || column > 5 || row < 0 || row > 5 {
+//                for piece in pieces where piece.node == node {
+//                    node.position = CGPoint(x: piece.xOrigin, y: piece.yOrigin)
+//                    self.newPos = PositionPiece(x: piece.xOrigin, y: piece.yOrigin)
+//                }
+//            } else {
+//                let center = centerTile(atPoint: position)
+//                node.position = center
+//                self.newPos = PositionPiece(x: center.x, y: center.y)
+//                
+//                
+//            }
+//            
+//            
+//            for i in pieces.indices {
+//                if pieces[i].node == node {
+//                    pieces[i].currentPosition.append(Move(previousPos: self.previousPos!, newPos: self.newPos!))
+//                }
+//            }
+//            
+//            
+//        }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {

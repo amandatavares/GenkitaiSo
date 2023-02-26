@@ -11,3 +11,13 @@ struct Index: Codable, Equatable {
     let row: Int
     let column: Int
 }
+
+struct Position: Codable, Equatable {
+    let x: Double
+    let y: Double
+}
+
+struct Move {
+    var previousPos: Position
+    var newPos: Position
+}

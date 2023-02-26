@@ -15,13 +15,15 @@ class GameViewController: UIViewController {
     @IBOutlet weak var skView: SKView!
     @IBOutlet weak var playerNameLabel: UILabel!
     @IBOutlet weak var stateMessageLabel: UILabel!
-    @IBOutlet weak var chatTextView: UITextView!
+    @IBOutlet weak var chatTableView: UITableView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var giveUpButton: UIButton!
     
     //MARK: - Socket Service Instatiation
     let socketService: SocketService = SocketService()
-    
+    var chat = Chat()
+
     //MARK: - Custom Alert
 //    lazy var stateView: UIView = {
 ////        let view = UIView(frame: self.skView.frame)
@@ -63,13 +65,13 @@ class GameViewController: UIViewController {
     
     //MARK: - View Actions
     @IBAction func sendAction(_ sender: UIButton) {
-        if playerIsConnected() {
-            if let content = self.textField.text, content.replacingOccurrences(of: " ", with: "") != "" {
-                socketService.sendMessage(author: socketService.name!, content: content)
-                self.textField.text?.removeAll()
-                self.view.endEditing(true)
-            }
-        }
+//        if playerIsConnected() {
+//        if let content = self.textField.text, content.replacingOccurrences(of: " ", with: "") != "" {
+        socketService.sendMessage(author: "fodida", content: self.textField.text ?? "?")
+        self.textField.text?.removeAll()
+        self.view.endEditing(true)
+//        }
+//        }
     }
     
     //MARK: - Connection Status Verification
@@ -97,13 +99,13 @@ class GameViewController: UIViewController {
         
         self.stateMessageLabel.text = GameState.awaitingConnection.rawValue
         
-        self.chatTextView.layoutManager.allowsNonContiguousLayout = false
-        self.chatTextView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: -20, right: 10);
+        let image = UIImage(systemName: "flag.fill")
+        self.giveUpButton.imageView?.image = image
         
+        self.chatTableView.dataSource = self
+        self.chatTableView.delegate = self
+        self.socketService.delegate = self
         self.textField.delegate = self
-        
-        socketService.delegate = self
-        
         
 //             Load the SKScene from 'GameScene.sks'
         if let scene = GKScene(fileNamed: "GameScene") {
@@ -155,12 +157,30 @@ class GameViewController: UIViewController {
         return true
     }
     
+    @IBAction func didFinishedTurn(_ sender: Any) {
+        print("clicked finish turn")
+//        for piece in gameScene.pieces {
+//            var move = piece.currentPosition
+//            self.socketService.move(from: move[0].previous, to: move[0].new)
+//        }
+//        for move in gameScene.movePices {
+//            self.service.move(from: move.previousPos, to: move.newPos)
+//        }
+    }
+    
+    @IBAction func didGaveUp(_ sender: Any) {
+        print("clicked give up")
+        showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
+            self.restart()
+        }
+        
+    }
+    
     //MARK: - Restart
     func restart() {
         socketService.restart()
         viewDidLoad()
         viewDidAppear(true)
-        self.chatTextView.text = "\n"
     }
 }
 
@@ -186,11 +206,35 @@ extension GameViewController: UITextFieldDelegate {
 }
 
 
+//MARK: - TableViewDelegate
+extension GameViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.chat.messages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = chatTableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatTableViewCell
+        cell.nameLabel.text = self.chat.messages[indexPath.row].author
+        cell.messageLabel.text = self.chat.messages[indexPath.row].content
+        
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "HH:mm"
+//        dateFormatter.locale = Locale(identifier: "pt_BR")
+//        let serverTime = dateFormatter.date(from:self.chat.messages[indexPath.row].timestamp)!
+//        let time = dateFormatter.string(from: timestamp)
+
+        cell.timeLabel.text = self.chat.messages[indexPath.row].timestamp
+        return cell
+    }
+    
+    
+}
+
 //MARK: - GameDelegate
 extension GameViewController: GameDelegate {
     
     func didStart() {
-        if gameScene.player == .leftPlayer {
+        if gameScene.player == .playerTop {
 //            state = .yourTurn
             print("Your turn")
         } else {
@@ -203,7 +247,7 @@ extension GameViewController: GameDelegate {
         
 //        self.gameScene.board.verifyDeadPieces()
         
-        self.gameScene.board.hasMoved = false
+//        self.gameScene.board.hasMoved = false
         self.gameScene.board.newPos = nil
         self.gameScene.board.previousPos = nil
         
@@ -216,51 +260,32 @@ extension GameViewController: GameDelegate {
         }
     }
     
-    func playerDidMove(_ name: String, from originIndex: Index, to newIndex: Index) {
-        gameScene.board.movePiece(from: originIndex, to: newIndex)
+    func playerDidMove(_ name: String, from origin: Position, to new: Position) {
+        print("Se mexeu aí \(origin) para \(new)")
+        gameScene.board.movePiece(from: origin, to: new)
     }
     
     func didWin() {
-        let alert = UIAlertController(title: "You Win", message: "", preferredStyle: .alert)
-        let exit = UIAlertAction(title: "Play Again", style: .default, handler: { _ in self.restart() })
-        alert.addAction(exit)
-        self.present(alert, animated: true, completion: nil)
+
     }
-    
+//
     func didLose() {
-        let alert = UIAlertController(title: "You Lose", message: "", preferredStyle: .alert)
-        let exit = UIAlertAction(title: "Play Again", style: .default, handler: { _ in self.restart() })
-        alert.addAction(exit)
-        self.present(alert, animated: true, completion: nil)
+
     }
-    
-    func receivedMessage(_ name: String, msg: String) {
-
-        let mutAtt = NSMutableAttributedString(attributedString: chatTextView.attributedText)
-        
-        let fontBold = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)]
-        let fontNorm = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-
-        let attString = NSMutableAttributedString(string: "\(name.capitalized): ", attributes: fontBold)
-        attString.append(NSAttributedString(string:"\(msg)\n", attributes: fontNorm))
-
-        
-        mutAtt.insert(attString, at: mutAtt.length-1)
-        self.chatTextView.attributedText = mutAtt
-       
-        let stringLength: Int = self.chatTextView.text.count
-        let range = NSMakeRange(stringLength-1, 1)
-        self.chatTextView.scrollRangeToVisible(range)
+//
+    func receivedMessage(name: String, msg: String, hour: String) {
+        self.chat.messages.append(Message(timestamp: hour, author: name, content: msg))
+        self.chatTableView.reloadData()
     }
     
     func youArePlayingAt(_ team: String) {
         gameScene.player = Player(rawValue: team) ?? .disconnected
-        self.playerNameLabel.text = "You are Team "+gameScene.player.rawValue.capitalized
+        
+        self.playerNameLabel.text = "You are  "+gameScene.player.rawValue.capitalized
         print("👾 You are player \(gameScene.player.rawValue)")
     }
     
 }
-
 
 extension GameViewController: BoardDelegate {
     

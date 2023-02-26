@@ -9,8 +9,8 @@ import Foundation
 
 enum Player: String {
     case disconnected = ""
-    case leftPlayer = "left"
-    case rightPlayer = "right"
+    case playerTop = "playerTop"
+    case playerBottom = "playerBottom"
 }
 
 enum GameResult {

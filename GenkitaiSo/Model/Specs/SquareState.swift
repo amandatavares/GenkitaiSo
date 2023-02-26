@@ -25,7 +25,7 @@ class SquareState {
         self.type = type
         self.setColorHandler = colorHandler
         
-        if type == .leftPlayer {
+        if type == .playerTop {
             self.bgColor = .white
             self.pieceColor = .red
         } else {

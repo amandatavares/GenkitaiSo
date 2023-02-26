@@ -45,7 +45,7 @@ class Board {
     
     private var currentNode: SKNode?
     
-    private var pieces: [Piece] = []
+    var pieces: [Piece] = []
     
 //    REDO: gameover logic
 //    var amountDeadTop: Int = 0 {
@@ -84,10 +84,11 @@ class Board {
         return nil
     }
     
-    func getSquare(at index: Index) -> Square? {
-        if index.row >= 0, index.column >= 0, index.row < rowsNodes.count, index.column < rowsNodes[index.row].count {
-            return Square(node: rowsNodes[index.row][index.column], data: rowsData[index.row][index.column])
-        }
+    func getSquare(at index: Position) -> Square? {
+//        if index.row >= 0, index.column >= 0, index.row < rowsNodes.count, index.column < rowsNodes[index.row].count {
+//            return Square(node: rowsNodes[index.row][index.column], data: rowsData[index.row][index.column])
+//        }
+        print("reform")
         return nil
     }
     
@@ -120,9 +121,9 @@ class Board {
         tileMap = SKTileMapNode(tileSet: tileSet, columns: numberOfRows, rows: numberOfRows, tileSize: tileSize)
         let tileGroup = tileSet.tileGroups.first
         tileMap.fill(with: tileGroup) // fill or set by column/row
-        tileMap.anchorPoint = .zero
-                
-//        self.addChild(tileMap)
+        tileMap.anchorPoint = .init(x: -0.23, y: -0.53)
+//        change position here!!!
+
     }
     
     func getSquare(atScreenPoint point: CGPoint) -> SquareState? {
@@ -135,7 +136,7 @@ class Board {
         return nil
     }
     
-    func getPiece(at index: Index) -> Piece? {
+    func getPiece(at index: Position) -> Piece? {
         return pieces.filter { $0.index == index }.first
     }
     
@@ -159,7 +160,7 @@ class Board {
 //        self.node.addChild(mask)
 //    }
     
-    func movePiece(from originIndex: Index, to newIndex: Index) {}
+    func movePiece(from originIndex: Position, to newIndex: Position) {}
 //    func verifyDeadPieces() {}
     
 }
@@ -185,7 +186,7 @@ extension Board: SquareStateDelegate {
 
 
 extension Board: PieceDelegate {
-    func pieceRemoved(from index: Index) {
+    func pieceRemoved(from index: Position) {
         pieces = pieces.filter { $0.index != index }
         getSquare(at: index)?.data.setEmpty()
     }

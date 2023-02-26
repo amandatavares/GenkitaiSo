@@ -10,6 +10,6 @@ import Foundation
 class Chat {
     
     var onlinePlayers: [Player] = []
-    let messages: [Message] = []
+    var messages: [Message] = []
     
 }

@@ -14,10 +14,11 @@ class Piece {
     
     var node: SKShapeNode
     let type: Player
-    var index: Index
-    var possibleMoves: [Index] = []
+    var index: Position
+    var initialPosition: [Position] = []
+    var currentPosition: [Move] = []
     
-    init(color: UIColor, position: CGPoint, index: Index, type: Player) {
+    init(color: UIColor, position: CGPoint, index: Position, type: Player) {
         
         self.type = type
         self.index = index
