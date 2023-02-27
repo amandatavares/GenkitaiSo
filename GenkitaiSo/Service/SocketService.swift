@@ -87,7 +87,7 @@ class SocketService {
                     self?.player = name
                     self?.delegate?.youArePlayingAt(name)
                 }
-                self?.delegate.receivedMessage(name: "🟢", msg: "Usuário: \(name)", hour: "")
+                self?.delegate.receivedMessage(name: "🟢 \(name)", msg: "Acabou de entrar", hour: "")
             }
         }
         
@@ -98,7 +98,7 @@ class SocketService {
         
         socket.on("uList") { [weak self] data, ack -> Void in
             if let name = data[0] as? String {
-                self?.delegate.receivedMessage(name: "🟢", msg: "Usuário: \(name)", hour: "")
+                self?.delegate.receivedMessage(name: "🟢 \(name)", msg: "Acabou de entrar", hour: "")
             }
         }
         

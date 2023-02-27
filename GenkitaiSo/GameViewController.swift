@@ -33,7 +33,8 @@ class GameViewController: UIViewController {
     lazy var stateView: UIView = {
         let stateView = UIView(frame: self.skView.frame)
         let label = UILabel()
-        label.frame = CGRect(origin: CGPoint(x: stateView.frame.width/2-50, y:  stateView.frame.height/2), size: CGSize(width: 150, height: 20))
+        label.frame = CGRect(origin: CGPoint(x: stateView.frame.width/2-50, y:  stateView.frame.height/2), size: CGSize(width: 150, height: 100))
+        label.numberOfLines = 0
         label.text = state.rawValue
         label.textColor = UIColor.white
         label.textAlignment = .center
@@ -191,7 +192,7 @@ class GameViewController: UIViewController {
         self.gameView.layer.cornerRadius = 20
         self.view.backgroundColor = UIColor.Game.background
         self.textField.backgroundColor = UIColor.Game.background
-        
+        self.chatTableView.separatorColor = UIColor.systemGray6
     }
 }
 
