@@ -31,9 +31,15 @@ class GameViewController: UIViewController {
 
     //MARK: - Custom Alert
     lazy var stateView: UIView = {
-        let view = UIView(frame: self.skView.frame)
-        view.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
-        return view
+        let stateView = UIView(frame: self.skView.frame)
+        let label = UILabel()
+        label.frame = CGRect(x: stateView.frame.width/2-200, y:  stateView.frame.height/2, width: 200, height: 20)
+        label.text = "Opponent's turn!"
+        label.textColor = UIColor.white
+        label.textAlignment = .center
+        stateView.backgroundColor = UIColor.init(white: 0, alpha: 0.6)
+        stateView.addSubview(label)
+        return stateView
     }()
 
     //MARK: - GameState

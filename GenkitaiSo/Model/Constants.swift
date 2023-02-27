@@ -20,9 +20,9 @@ enum GameResult {
 }
 
 enum GameState: String {
-    case awaitingConnection = "Awaiting Connection from another Player"
-    case waiting = "Waiting for the Opponent's Move"
-    case yourTurn = "Make your Move!"
+    case awaitingConnection = "Awaiting another player"
+    case waiting = "Waiting opponent's turn finish"
+    case yourTurn = "Your turn!"
     case youWin = "You won!"
     case youLose = "You've lost!"
 }
