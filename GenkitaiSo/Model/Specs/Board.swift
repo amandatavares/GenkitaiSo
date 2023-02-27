@@ -62,31 +62,39 @@ class Board {
     }
     
     func setupInitialPieces() {
-        self.originTopPositions = [Position(x: 140.0, y: 120.0),
-                                 Position(x: 200.0, y: 120.0),
-                                 Position(x: 260.0, y: 120.0),
-                                 Position(x: 320.0, y: 120.0),
-                                 Position(x: 380.0, y: 120.0),
-                                 Position(x: 440.0, y: 120.0),
-                                 Position(x: 500.0, y: 120.0),
-                                 Position(x: 560.0, y: 120.0)]
+        let boardSize = self.tileMap.frame.size
+        let topY = boardSize.height*2-(boardSize.height/3)
+        let bottomY = boardSize.height-(boardSize.height/2)+30
+        // 60 inset
+        self.originTopPositions = [Position(x: 150.0, y: topY),
+                                   Position(x: 210.0, y: topY),
+                                   Position(x: 270.0, y: topY),
+                                   Position(x: 330.0, y: topY),
+                                   Position(x: 390.0, y: topY),
+                                   Position(x: 450.0, y: topY),
+                                   Position(x: 510.0, y: topY),
+                                   Position(x: 560.0, y: topY)]
         
-        self.originBottomPositions = [Position(x: 140.0, y: 680.0),
-                               Position(x: 200.0, y: 680.0),
-                               Position(x: 260.0, y: 680.0),
-                               Position(x: 320.0, y: 680.0),
-                               Position(x: 380.0, y: 680.0),
-                               Position(x: 440.0, y: 680.0),
-                               Position(x: 500.0, y: 680.0),
-                               Position(x: 560.0, y: 680.0)]
+        self.originBottomPositions = [Position(x: 150.0, y: bottomY),
+                               Position(x: 210.0, y: bottomY),
+                               Position(x: 270.0, y: bottomY),
+                               Position(x: 330.0, y: bottomY),
+                               Position(x: 390.0, y: bottomY),
+                               Position(x: 450.0, y: bottomY),
+                               Position(x: 510.0, y: bottomY),
+                               Position(x: 560.0, y: bottomY)]
         
         for top in self.originTopPositions {
+            print(top)
             let piece = Piece(index: Position(x: top.x, y: top.y), type: .playerTop)
+            self.tileMap.addChild(piece.node)
             self.pieces.append(piece)
         }
         
         for bottom in self.originBottomPositions {
+            print(bottom)
             let piece = Piece(index: Position(x: bottom.x, y: bottom.y), type: .playerBottom)
+            self.tileMap.addChild(piece.node)
             self.pieces.append(piece)
         }
     }

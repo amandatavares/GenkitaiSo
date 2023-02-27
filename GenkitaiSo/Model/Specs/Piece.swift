@@ -16,17 +16,14 @@ class Piece {
     var index: Position
     var initialPosition: [Position] = []
     
-//    let xOrigin: Double
-//    let yOrigin: Double
-//    var currentPosition: [Move] = []
-    
     init(index: Position, type: Player) {
         
+        // Piece definition
         self.type = type
         self.index = index
         
+        // Customize piece
         let piece = SKShapeNode(circleOfRadius: 20)
-//        piece.fillColor = color
         piece.position = CGPoint(x: index.x, y: index.y)
         piece.name = "piece"
         
@@ -36,19 +33,16 @@ class Piece {
             piece.fillColor = UIColor.PieceColor.top //yellow
         }
         
-//        let shadow = SKShapeNode(circleOfRadius: 15)
+//        // Add shadow
+//        let shadow = SKShapeNode(circleOfRadius: 20)
 //        shadow.fillColor = UIColor(white: 0.1, alpha: 0.2)
 //        shadow.lineWidth = 0
-//        shadow.zPosition = 2
-//        shadow.position = CGPoint(x: position.x - 3, y: position.y - 5)
+//        shadow.position = CGPoint(x: index.x + 3, y: index.y - 5)
 //
 //        let node = SKShapeNode()
 //        node.addChild(shadow)
+//        node.addChild(piece)
         
-//        node.addChild(piece) // important to review
-        
-
-//        self.pieces.append(Piece(node: circle, xOrigin: x, yOrigin: y, color: colorPiece))
         self.node = piece
         
     }

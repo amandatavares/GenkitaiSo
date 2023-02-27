@@ -50,8 +50,9 @@ class SocketService {
         socket.connect()
     }
     
-    func giveUp() { //surrender - need to add on server
+    func giveUp(player: String) { //surrender - need to add on server
         self.socket.emit("giveUp", player)
+        exitPlayer(player: player)
     }
     
     func conectPlayer() {
@@ -103,6 +104,11 @@ class SocketService {
         
         socket.on("startGame") { [weak self] data, ack in
             self?.delegate.didStart()
+            return
+        }
+        
+        socket.on("giveUp") { [weak self] data, ack in
+            self?.delegate.didLose()
             return
         }
 

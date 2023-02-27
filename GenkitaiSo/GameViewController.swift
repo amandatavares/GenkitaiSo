@@ -33,8 +33,8 @@ class GameViewController: UIViewController {
     lazy var stateView: UIView = {
         let stateView = UIView(frame: self.skView.frame)
         let label = UILabel()
-        label.frame = CGRect(x: stateView.frame.width/2-200, y:  stateView.frame.height/2, width: 200, height: 20)
-        label.text = "Opponent's turn!"
+        label.frame = CGRect(origin: CGPoint(x: stateView.frame.width/2-50, y:  stateView.frame.height/2), size: CGSize(width: 150, height: 20))
+        label.text = state.rawValue
         label.textColor = UIColor.white
         label.textAlignment = .center
         stateView.backgroundColor = UIColor.init(white: 0, alpha: 0.6)
@@ -44,7 +44,7 @@ class GameViewController: UIViewController {
 
     //MARK: - GameState
 
-    var state: GameState! = .yourTurn {
+    var state: GameState! = .awaitingConnection {
         didSet {
             self.stateMessageLabel.text = state.rawValue
             switch state {
@@ -74,11 +74,9 @@ class GameViewController: UIViewController {
     //MARK: - View Actions
     @IBAction func sendAction(_ sender: UIButton) {
 //        if playerIsConnected() {
-//        if let content = self.textField.text, content.replacingOccurrences(of: " ", with: "") != "" {
         socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
         self.textField.text?.removeAll()
         self.view.endEditing(true)
-//        }
 //        }
     }
     
@@ -141,7 +139,6 @@ class GameViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        showStateView()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -175,8 +172,9 @@ class GameViewController: UIViewController {
     @IBAction func didGaveUp(_ sender: Any) {
         print("clicked give up")
         showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
-            self.socketService.giveUp()
-            self.restart()
+            self.socketService.giveUp(player: self.gameScene.player.rawValue)
+            self.didLose()
+//            self.restart()
         }
     }
     
@@ -241,7 +239,7 @@ extension GameViewController: GameDelegate {
         self.gameScene.board.currentMoves = []
         
         if name == gameScene.player.rawValue {
-            state = .waiting //uncomment when socket
+            state = .waiting
             print("Waiting")
         } else {
             state = .yourTurn
@@ -257,9 +255,19 @@ extension GameViewController: GameDelegate {
     func didWin() {
 
     }
-//
-    func didLose() {
 
+    // feels wrong
+    func didLose() {
+        state = GameState.youLose
+        let loseView = UIView(frame: self.skView.frame)
+        let label = UILabel()
+        label.frame = CGRect(origin: CGPoint(x: loseView.frame.width/2-50, y:  loseView.frame.height/2), size: CGSize(width: 150, height: 20))
+        label.text = state.rawValue
+        label.textColor = UIColor.white
+        label.textAlignment = .center
+        loseView.backgroundColor = UIColor.init(white: 0, alpha: 0.6)
+        loseView.addSubview(label)
+        self.view.addSubview(loseView)
     }
 //
     func receivedMessage(name: String, msg: String, hour: String) {
