@@ -13,16 +13,17 @@ class GameViewController: UIViewController {
 
     //MARK: - View Outlets
     @IBOutlet weak var skView: SKView!
+    
     @IBOutlet weak var playerNameLabel: UILabel!
     @IBOutlet weak var stateMessageLabel: UILabel!
+    
     @IBOutlet weak var chatTableView: UITableView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var giveUpButton: UIButton!
     
-    @IBOutlet weak var chatView: UIView!
-    @IBOutlet weak var sendChatView: UIView!
     @IBOutlet weak var chatStackView: UIStackView!
+    @IBOutlet weak var gameView: UIView!
     
     //MARK: - Socket Service Instatiation
     let socketService: SocketService = SocketService()
@@ -114,9 +115,7 @@ class GameViewController: UIViewController {
             if let sceneNode = scene.rootNode as! GameScene? {
                 sceneNode.board.delegate = self
                 
-                sceneNode.backgroundColor = UIColor(named: "gameBackground") ?? self.view.backgroundColor!
-                sceneNode.view?.layer.cornerRadius = 20
-                
+                sceneNode.backgroundColor = UIColor.Game.gameBackground
                 
                 // Set the scale mode to scale to fit the window
                 sceneNode.scaleMode = .aspectFill
@@ -125,7 +124,6 @@ class GameViewController: UIViewController {
                 skView.presentScene(sceneNode)
                 
                 skView.ignoresSiblingOrder = true
-                
                 skView.showsFPS = true
                 skView.showsNodeCount = true
             }
@@ -185,12 +183,10 @@ class GameViewController: UIViewController {
     
     func customizeViews() {
         
-        let image = UIImage(systemName: "flag.fill")
-        self.giveUpButton.imageView?.image = image
-        self.chatView.layer.cornerRadius = 20
-        self.sendChatView.layer.cornerRadius = 20
         self.chatStackView.layer.cornerRadius = 20
-        self.textField.backgroundColor = UIColor(named: "background")
+        self.gameView.layer.cornerRadius = 20
+        self.view.backgroundColor = UIColor.Game.background
+        self.textField.backgroundColor = UIColor.Game.background
         
     }
 }

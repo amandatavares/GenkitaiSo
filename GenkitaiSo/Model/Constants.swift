@@ -28,8 +28,13 @@ enum GameState: String {
 }
 
 extension UIColor {
-  struct PieceColor {
+    struct PieceColor {
       static var top: UIColor  { return UIColor(named: "pieceTop") ?? .yellow }
       static var bottom: UIColor { return UIColor(named: "pieceBottom") ?? .blue }
-  }
+    }
+    struct Game {
+        static var background: UIColor  { return UIColor(named: "background") ?? .systemBackground }
+        static var gameBackground: UIColor { return UIColor(named: "gameBackground") ?? .systemGray6 }
+        static var primary: UIColor  { return UIColor(named: "primary") ?? .systemBlue }
+    }
 }

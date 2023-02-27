@@ -56,7 +56,7 @@ class Board {
         
         let boardTileGroup = tileSet.tileGroups.first
         tileMap.fill(with: boardTileGroup) // fill or set by column/row
-        tileMap.anchorPoint = .init(x: -0.23, y: -0.33)
+        tileMap.anchorPoint = .init(x: -0.15, y: -0.55)
 //        change position here!!!
 
     }
