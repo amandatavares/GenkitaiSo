@@ -21,12 +21,13 @@
                                 <rect key="frame" x="16" y="34" width="888" height="970"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WTZ-ut-BeG">
-                                        <rect key="frame" x="369" y="925.5" width="150" height="34.5"/>
+                                        <rect key="frame" x="369" y="888" width="150" height="50"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Jyo-pe-f0e"/>
                                             <constraint firstAttribute="width" constant="150" id="sGt-UP-fA0"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" image="checkmark.square.fill" catalog="system" title="Finish turn">
+                                        <buttonConfiguration key="configuration" style="filled" image="checkmark.circle.fill" catalog="system" title=" Finish turn">
                                             <color key="baseBackgroundColor" name="primary"/>
                                         </buttonConfiguration>
                                         <connections>
@@ -34,7 +35,7 @@
                                         </connections>
                                     </button>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UZf-Dd-ZpZ" customClass="SKView">
-                                        <rect key="frame" x="16" y="16" width="856" height="893.5"/>
+                                        <rect key="frame" x="16" y="16" width="856" height="856"/>
                                         <color key="backgroundColor" red="0.89411764705882346" green="0.9137254901960784" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                 </subviews>
@@ -44,7 +45,7 @@
                                     <constraint firstAttribute="trailing" secondItem="UZf-Dd-ZpZ" secondAttribute="trailing" constant="16" id="BXA-EX-fun"/>
                                     <constraint firstItem="WTZ-ut-BeG" firstAttribute="centerX" secondItem="cDh-Q7-ZaV" secondAttribute="centerX" id="MRS-ED-JcT"/>
                                     <constraint firstItem="WTZ-ut-BeG" firstAttribute="top" secondItem="UZf-Dd-ZpZ" secondAttribute="bottom" constant="16" id="e1u-Rm-OPU"/>
-                                    <constraint firstAttribute="bottom" secondItem="WTZ-ut-BeG" secondAttribute="bottom" constant="10" id="j89-V5-8qB"/>
+                                    <constraint firstAttribute="bottom" secondItem="WTZ-ut-BeG" secondAttribute="bottom" constant="32" id="j89-V5-8qB"/>
                                     <constraint firstItem="UZf-Dd-ZpZ" firstAttribute="leading" secondItem="cDh-Q7-ZaV" secondAttribute="leading" constant="16" id="jQ6-4h-vdW"/>
                                 </constraints>
                             </view>
@@ -52,7 +53,7 @@
                                 <rect key="frame" x="926.5" y="34" width="423.5" height="970"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rxx-r1-SCJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="423.5" height="916"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="423.5" height="878"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q3Y-Rc-x6N">
                                                 <rect key="frame" x="20" y="24" width="305" height="20.5"/>
@@ -67,7 +68,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aSj-8d-v5t">
-                                                <rect key="frame" x="10" y="141" width="403.5" height="765"/>
+                                                <rect key="frame" x="10" y="141" width="403.5" height="727"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="chatCell" rowHeight="72" id="4sn-GT-BxH" customClass="ChatTableViewCell" customModule="GenkitaiSo" customModuleProvider="target">
@@ -172,15 +173,18 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ti-nP-muy">
-                                        <rect key="frame" x="0.0" y="916" width="423.5" height="54"/>
+                                        <rect key="frame" x="0.0" y="878" width="423.5" height="92"/>
                                         <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Digite uma mensagem" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WaT-0B-xYY">
-                                                <rect key="frame" x="20" y="10" width="323.5" height="34"/>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type a message" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WaT-0B-xYY">
+                                                <rect key="frame" x="20" y="10" width="323.5" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="0aM-ch-lCX"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9g-qa-T9x">
-                                                <rect key="frame" x="353.5" y="10" width="50" height="34"/>
+                                                <rect key="frame" x="353.5" y="10" width="50" height="50"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" image="location.fill" catalog="system">
                                                     <color key="baseBackgroundColor" name="primary"/>
@@ -195,9 +199,9 @@
                                             <constraint firstAttribute="trailing" secondItem="x9g-qa-T9x" secondAttribute="trailing" constant="20" id="5cC-jQ-LDs"/>
                                             <constraint firstItem="x9g-qa-T9x" firstAttribute="leading" secondItem="WaT-0B-xYY" secondAttribute="trailing" constant="10" id="OHk-jH-XZ8"/>
                                             <constraint firstItem="x9g-qa-T9x" firstAttribute="top" secondItem="WaT-0B-xYY" secondAttribute="top" id="SNl-JV-s7t"/>
-                                            <constraint firstAttribute="bottom" secondItem="WaT-0B-xYY" secondAttribute="bottom" constant="10" id="pc0-Nq-hdP"/>
+                                            <constraint firstItem="x9g-qa-T9x" firstAttribute="bottom" secondItem="WaT-0B-xYY" secondAttribute="bottom" id="ZcC-34-2nU"/>
+                                            <constraint firstAttribute="bottom" secondItem="WaT-0B-xYY" secondAttribute="bottom" constant="32" id="pc0-Nq-hdP"/>
                                             <constraint firstItem="WaT-0B-xYY" firstAttribute="top" secondItem="6Ti-nP-muy" secondAttribute="top" constant="10" id="r4V-NS-ky0"/>
-                                            <constraint firstAttribute="bottom" secondItem="x9g-qa-T9x" secondAttribute="bottom" constant="10" id="xDL-Ut-UJv"/>
                                             <constraint firstItem="WaT-0B-xYY" firstAttribute="leading" secondItem="6Ti-nP-muy" secondAttribute="leading" constant="20" id="zOC-9x-Rjd"/>
                                         </constraints>
                                     </view>
@@ -241,7 +245,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
+        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="flag.fill" catalog="system" width="128" height="121"/>
         <image name="location.fill" catalog="system" width="128" height="119"/>
         <namedColor name="background">

@@ -31,14 +31,17 @@ class GameViewController: UIViewController {
 
     //MARK: - Custom Alert
     lazy var stateView: UIView = {
-        let stateView = UIView(frame: self.skView.frame)
+//        tileMap.anchorPoint = .init(x: -0.22, y: -0.85)
+        let stateView = UIView(frame: self.gameView.frame)
         let label = UILabel()
-        label.frame = CGRect(origin: CGPoint(x: stateView.frame.width/2-50, y:  stateView.frame.height/2), size: CGSize(width: 150, height: 100))
+        label.frame = CGRect(origin: CGPoint(x: stateView.frame.width/2-180, y:  stateView.frame.height/2-100), size: CGSize(width: 300, height: 100))
         label.numberOfLines = 0
         label.text = state.rawValue
-        label.textColor = UIColor.white
+        label.textColor = UIColor.label
         label.textAlignment = .center
-        stateView.backgroundColor = UIColor.init(white: 0, alpha: 0.6)
+        stateView.backgroundColor = UIColor.init(white: 1, alpha: 0.6)
+        stateView.clipsToBounds = true
+        stateView.layer.cornerRadius = 10
         stateView.addSubview(label)
         return stateView
     }()
@@ -191,9 +194,12 @@ class GameViewController: UIViewController {
         self.chatStackView.layer.cornerRadius = 10
         self.gameView.layer.cornerRadius = 10
         self.skView.layer.cornerRadius = 10
+        
         self.view.backgroundColor = UIColor.Game.background
         self.textField.backgroundColor = UIColor.Game.background
         self.chatTableView.separatorColor = UIColor.systemGray6
+        
+        self.textField.layer.borderColor = UIColor.Game.background.cgColor
     }
 }
 

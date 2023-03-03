@@ -20,6 +20,7 @@ class Board {
     var tileSet: SKTileSet!
     var tileMap: SKTileMapNode!
     var numberOfRows = 0
+    var numberOfPieces = 8
     
 //    private var currentNode: SKNode?
     
@@ -48,42 +49,39 @@ class Board {
         
         tileSet = SKTileSet(tileGroups: [tileGroup], tileSetType: .grid)
         
-        let tileSize = tileSet.defaultTileSize // from image size
+        let tileSize = CGSize(width: tileSet.defaultTileSize.width+5, height: tileSet.defaultTileSize.height+5) // from image size
 
-//        let tileSize = CGSize(width: 30, height: 30)
-        
         tileMap = SKTileMapNode(tileSet: tileSet, columns: numberOfRows, rows: numberOfRows, tileSize: tileSize)
         
         let boardTileGroup = tileSet.tileGroups.first
         tileMap.fill(with: boardTileGroup) // fill or set by column/row
-        tileMap.anchorPoint = .init(x: -0.12, y: -0.60)
+        tileMap.anchorPoint = .init(x: -0.22, y: -0.85)
 //        change position here!!!
 
     }
     
     func setupInitialPieces() {
+        let piecePlace = 40.0
+        let inset = 60.0
+        
+        // Set board place
         let boardSize = self.tileMap.frame.size
-        let topY = boardSize.height*2-(boardSize.height/3)
-        let bottomY = boardSize.height-(boardSize.height/2)+30
-        // 60 inset
-        self.originTopPositions = [Position(x: 150.0, y: topY),
-                                   Position(x: 210.0, y: topY),
-                                   Position(x: 270.0, y: topY),
-                                   Position(x: 330.0, y: topY),
-                                   Position(x: 390.0, y: topY),
-                                   Position(x: 450.0, y: topY),
-                                   Position(x: 510.0, y: topY),
-                                   Position(x: 560.0, y: topY)]
+        let topY = (boardSize.height*2)-piecePlace
+        let bottomY = boardSize.height-(3*piecePlace)
         
-        self.originBottomPositions = [Position(x: 150.0, y: bottomY),
-                               Position(x: 210.0, y: bottomY),
-                               Position(x: 270.0, y: bottomY),
-                               Position(x: 330.0, y: bottomY),
-                               Position(x: 390.0, y: bottomY),
-                               Position(x: 450.0, y: bottomY),
-                               Position(x: 510.0, y: bottomY),
-                               Position(x: 560.0, y: bottomY)]
+        // Set pieces positions
+        for i in 0..<numberOfPieces {
+            let topPosition = Position(x: 150.0+(inset*Double(i)), y: topY)
+            print(topPosition)
+            self.originTopPositions.append(topPosition)
+            
+            let bottomPosition = Position(x: 150.0+(inset*Double(i)), y: bottomY)
+            print(bottomPosition)
+            self.originBottomPositions.append(bottomPosition)
+
+        }
         
+        // Place pieces 
         for top in self.originTopPositions {
             print(top)
             let piece = Piece(index: Position(x: top.x, y: top.y), type: .playerTop)
