@@ -24,10 +24,8 @@
 		26302B62299B2AA7008AB32D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B61299B2AA7008AB32D /* Message.swift */; };
 		26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B64299B2B50008AB32D /* BoardDelegate.swift */; };
 		26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B66299B2B72008AB32D /* PieceDelegate.swift */; };
-		26302B69299B2BC4008AB32D /* SquareStateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B68299B2BC4008AB32D /* SquareStateDelegate.swift */; };
 		26302B6C299BB00B008AB32D /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B6B299BB00B008AB32D /* SocketService.swift */; };
-		267382EC299D0E4000E9CC30 /* SquareState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267382EB299D0E4000E9CC30 /* SquareState.swift */; };
-		267382EE299D11A400E9CC30 /* SquareNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267382ED299D11A400E9CC30 /* SquareNode.swift */; };
+		26680EE529B28D97005589B8 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26680EE429B28D97005589B8 /* StateView.swift */; };
 		98A5E107E2A058AC56676C2F /* Pods_GenkitaiSo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,10 +48,8 @@
 		26302B61299B2AA7008AB32D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		26302B64299B2B50008AB32D /* BoardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardDelegate.swift; sourceTree = "<group>"; };
 		26302B66299B2B72008AB32D /* PieceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceDelegate.swift; sourceTree = "<group>"; };
-		26302B68299B2BC4008AB32D /* SquareStateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareStateDelegate.swift; sourceTree = "<group>"; };
 		26302B6B299BB00B008AB32D /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
-		267382EB299D0E4000E9CC30 /* SquareState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareState.swift; sourceTree = "<group>"; };
-		267382ED299D11A400E9CC30 /* SquareNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareNode.swift; sourceTree = "<group>"; };
+		26680EE429B28D97005589B8 /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
 		48EA2432914D60882EFA73A9 /* Pods-GenkitaiSo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenkitaiSo.debug.xcconfig"; path = "Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo.debug.xcconfig"; sourceTree = "<group>"; };
 		7004FACA9B209E8A249910D4 /* Pods-GenkitaiSo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GenkitaiSo.release.xcconfig"; path = "Target Support Files/Pods-GenkitaiSo/Pods-GenkitaiSo.release.xcconfig"; sourceTree = "<group>"; };
 		B8A2D552E2699501401465FD /* Pods_GenkitaiSo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GenkitaiSo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +94,6 @@
 				26302B53299B28F6008AB32D /* Model */,
 				26302B42299B2656008AB32D /* GameScene.swift */,
 				26302B44299B2656008AB32D /* GameViewController.swift */,
-				2623A23229AA7BBF00E7C193 /* ChatTableViewCell.swift */,
 				26EF7A9C299D1D520076BD34 /* View */,
 			);
 			path = GenkitaiSo;
@@ -120,8 +115,6 @@
 				26302B5B299B2A54008AB32D /* Board.swift */,
 				26302B57299B29C4008AB32D /* Piece.swift */,
 				26302B59299B2A1E008AB32D /* Index.swift */,
-				267382ED299D11A400E9CC30 /* SquareNode.swift */,
-				267382EB299D0E4000E9CC30 /* SquareState.swift */,
 			);
 			path = Specs;
 			sourceTree = "<group>";
@@ -139,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				26302B66299B2B72008AB32D /* PieceDelegate.swift */,
-				26302B68299B2BC4008AB32D /* SquareStateDelegate.swift */,
 				26302B64299B2B50008AB32D /* BoardDelegate.swift */,
 			);
 			path = Utils;
@@ -156,6 +148,8 @@
 		26EF7A9C299D1D520076BD34 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2623A23229AA7BBF00E7C193 /* ChatTableViewCell.swift */,
+				26680EE429B28D97005589B8 /* StateView.swift */,
 				26302B3E299B2656008AB32D /* GameScene.sks */,
 				26302B40299B2656008AB32D /* Actions.sks */,
 				26302B49299B2658008AB32D /* Assets.xcassets */,
@@ -301,15 +295,13 @@
 			files = (
 				26302B43299B2656008AB32D /* GameScene.swift in Sources */,
 				26302B45299B2656008AB32D /* GameViewController.swift in Sources */,
-				267382EE299D11A400E9CC30 /* SquareNode.swift in Sources */,
 				26302B5A299B2A1E008AB32D /* Index.swift in Sources */,
 				26302B62299B2AA7008AB32D /* Message.swift in Sources */,
 				2623A23329AA7BBF00E7C193 /* ChatTableViewCell.swift in Sources */,
-				26302B69299B2BC4008AB32D /* SquareStateDelegate.swift in Sources */,
 				26302B58299B29C4008AB32D /* Piece.swift in Sources */,
-				267382EC299D0E4000E9CC30 /* SquareState.swift in Sources */,
 				26302B5C299B2A54008AB32D /* Board.swift in Sources */,
 				26302B5F299B2A98008AB32D /* Chat.swift in Sources */,
+				26680EE529B28D97005589B8 /* StateView.swift in Sources */,
 				26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */,
 				26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */,
 				26302B3D299B2656008AB32D /* AppDelegate.swift in Sources */,

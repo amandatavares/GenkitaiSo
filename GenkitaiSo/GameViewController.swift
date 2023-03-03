@@ -27,26 +27,17 @@ class GameViewController: UIViewController {
     
     //MARK: - Socket Service Instatiation
     let socketService: SocketService = SocketService()
-    var chat = Chat()
+    var chat = Chat() //Chat keep the messages
 
-    //MARK: - Custom Alert
-    lazy var stateView: UIView = {
-//        tileMap.anchorPoint = .init(x: -0.22, y: -0.85)
-        let stateView = UIView(frame: self.gameView.frame)
-        let label = UILabel()
-        label.frame = CGRect(origin: CGPoint(x: stateView.frame.width/2-180, y:  stateView.frame.height/2-100), size: CGSize(width: 300, height: 100))
-        label.numberOfLines = 0
-        label.text = state.rawValue
-        label.textColor = UIColor.label
-        label.textAlignment = .center
-        stateView.backgroundColor = UIColor.init(white: 1, alpha: 0.6)
-        stateView.clipsToBounds = true
-        stateView.layer.cornerRadius = 10
-        stateView.addSubview(label)
+    //MARK: - State View Alert
+    // When it's opponent's turn, we show this alert
+    lazy var stateView: StateView = {
+        let stateView = StateView(frame: self.gameView.frame)
+        stateView.label.text = state.rawValue
         return stateView
     }()
 
-    //MARK: - GameState
+    //MARK: - Define GameState
 
     var state: GameState! = .awaitingConnection {
         didSet {
@@ -60,7 +51,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    //MARK: - State View
+    //MARK: - State View Functions
     func showStateView() {
         self.view.addSubview(stateView)
     }
@@ -76,12 +67,33 @@ class GameViewController: UIViewController {
     }
     
     //MARK: - View Actions
+    
+    // Action: Send message by socket
     @IBAction func sendAction(_ sender: UIButton) {
 //        if playerIsConnected() {
         socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
         self.textField.text?.removeAll()
         self.view.endEditing(true)
 //        }
+    }
+    
+    // Action: Send moves and define turn through socket
+    @IBAction func didFinishedTurn(_ sender: Any) {
+        print("clicked finish turn")
+        for move in gameScene.board.currentMoves {
+            self.socketService.move(from: move.previousPos, to: move.newPos)
+        }
+        self.socketService.newTurn()
+    }
+    
+    // Action : User gave up
+    @IBAction func didGaveUp(_ sender: Any) {
+        print("clicked give up")
+        showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
+            self.socketService.giveUp(player: self.gameScene.player.rawValue)
+            self.didLose() //should be instantiate as delegate
+//            self.restart()
+        }
     }
     
     //MARK: - Connection Status Verification
@@ -95,11 +107,13 @@ class GameViewController: UIViewController {
         return true
     }
     
-    func showAlert(text: String, buttonText: String = "OK", handler: @escaping (UIAlertAction) -> Void = { alert in }) {
+    func showAlert(text: String, buttonText: String = "Yes", handler: @escaping (UIAlertAction) -> Void = { alert in }) {
         let alertController = UIAlertController(title: text, message: "", preferredStyle: .alert)
         alertController.addAction(
             UIAlertAction(title: buttonText, style: .default, handler: handler)
         )
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in alertController.dismiss(animated: true) })
+        
         self.present(alertController, animated: true, completion: nil)
     }
     
@@ -118,17 +132,14 @@ class GameViewController: UIViewController {
         
         self.textField.delegate = self
         
-//             Load the SKScene from 'GameScene.sks'
+        // Load the SKScene from 'GameScene.sks'
         if let scene = GKScene(fileNamed: "GameScene") {
             if let sceneNode = scene.rootNode as! GameScene? {
                 sceneNode.board.delegate = self
                 
                 sceneNode.backgroundColor = UIColor.Game.gameBackground
-                
-                // Set the scale mode to scale to fit the window
                 sceneNode.scaleMode = .aspectFill
                 
-                // Present the scene
                 skView.presentScene(sceneNode)
                 
                 skView.ignoresSiblingOrder = true
@@ -139,10 +150,6 @@ class GameViewController: UIViewController {
 
         self.gameScene.board.delegate = self
 
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -165,22 +172,7 @@ class GameViewController: UIViewController {
         return true
     }
     
-    @IBAction func didFinishedTurn(_ sender: Any) {
-        print("clicked finish turn")
-        for move in gameScene.board.currentMoves {
-            self.socketService.move(from: move.previousPos, to: move.newPos)
-        }
-        self.socketService.newTurn()
-    }
-    
-    @IBAction func didGaveUp(_ sender: Any) {
-        print("clicked give up")
-        showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
-            self.socketService.giveUp(player: self.gameScene.player.rawValue)
-            self.didLose()
-//            self.restart()
-        }
-    }
+
     
     //MARK: - Restart
     func restart() {
@@ -256,26 +248,22 @@ extension GameViewController: GameDelegate {
     }
     
     func playerDidMove(_ name: String, from origin: Position, to new: Position) {
-        print("Se mexeu aí \(origin) para \(new)")
+        print("Did move from \(origin) to \(new)")
         gameScene.board.movePiece(from: origin, to: new)
     }
     
     func didWin() {
-
+        state = GameState.youWin
+        self.stateView.removeFromSuperview()
+        self.stateView.label.text = state.rawValue
+        self.view.addSubview(self.stateView)
     }
 
-    // feels wrong
     func didLose() {
         state = GameState.youLose
-        let loseView = UIView(frame: self.skView.frame)
-        let label = UILabel()
-        label.frame = CGRect(origin: CGPoint(x: loseView.frame.width/2-50, y:  loseView.frame.height/2), size: CGSize(width: 150, height: 20))
-        label.text = state.rawValue
-        label.textColor = UIColor.white
-        label.textAlignment = .center
-        loseView.backgroundColor = UIColor.init(white: 0, alpha: 0.6)
-        loseView.addSubview(label)
-        self.view.addSubview(loseView)
+        self.stateView.removeFromSuperview()
+        self.stateView.label.text = state.rawValue
+        self.view.addSubview(self.stateView)
     }
 //
     func receivedMessage(name: String, msg: String, hour: String) {

@@ -8,11 +8,6 @@
 import Foundation
 import SpriteKit
 
-struct Square {
-    let node: SKShapeNode
-    let data: SquareState
-}
-
 class Board {
     
     weak var delegate: BoardDelegate!
@@ -22,7 +17,7 @@ class Board {
     var numberOfRows = 0
     var numberOfPieces = 8
     
-//    private var currentNode: SKNode?
+    // private var currentNode: SKNode?
     
     var pieces: [Piece] = []
     var currentMoves: [Move] = [] //movePieces
@@ -56,7 +51,6 @@ class Board {
         let boardTileGroup = tileSet.tileGroups.first
         tileMap.fill(with: boardTileGroup) // fill or set by column/row
         tileMap.anchorPoint = .init(x: -0.22, y: -0.85)
-//        change position here!!!
 
     }
     
@@ -153,17 +147,6 @@ class Board {
 
     
 }
-
-extension Board: SquareStateDelegate {
-    func didSelect(index: Index) {
-        
-    }
-    func didUnselect(index: Index) {
-//        
-    }
-    
-}
-
 
 extension Board: PieceDelegate {
     func pieceRemoved(from index: Position) {

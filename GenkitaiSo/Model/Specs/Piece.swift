@@ -33,16 +33,6 @@ class Piece {
             piece.fillColor = UIColor.PieceColor.top //yellow
         }
         
-//        // Add shadow
-//        let shadow = SKShapeNode(circleOfRadius: 20)
-//        shadow.fillColor = UIColor(white: 0.1, alpha: 0.2)
-//        shadow.lineWidth = 0
-//        shadow.position = CGPoint(x: index.x + 3, y: index.y - 5)
-//
-//        let node = SKShapeNode()
-//        node.addChild(shadow)
-//        node.addChild(piece)
-        
         self.node = piece
         
     }
