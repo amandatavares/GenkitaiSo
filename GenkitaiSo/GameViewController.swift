@@ -188,8 +188,9 @@ class GameViewController: UIViewController {
     
     func customizeViews() {
         
-        self.chatStackView.layer.cornerRadius = 20
-        self.gameView.layer.cornerRadius = 20
+        self.chatStackView.layer.cornerRadius = 10
+        self.gameView.layer.cornerRadius = 10
+        self.skView.layer.cornerRadius = 10
         self.view.backgroundColor = UIColor.Game.background
         self.textField.backgroundColor = UIColor.Game.background
         self.chatTableView.separatorColor = UIColor.systemGray6
