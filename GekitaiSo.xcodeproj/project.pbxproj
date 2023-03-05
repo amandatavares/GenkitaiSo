@@ -31,7 +31,7 @@
 
 /* Begin PBXFileReference section */
 		2623A23229AA7BBF00E7C193 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
-		26302B39299B2656008AB32D /* GenkitaiSo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GenkitaiSo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		26302B39299B2656008AB32D /* GekitaiSo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GekitaiSo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26302B3C299B2656008AB32D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		26302B3E299B2656008AB32D /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		26302B40299B2656008AB32D /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 		26302B3A299B2656008AB32D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				26302B39299B2656008AB32D /* GenkitaiSo.app */,
+				26302B39299B2656008AB32D /* GekitaiSo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -179,9 +179,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		26302B38299B2656008AB32D /* GenkitaiSo */ = {
+		26302B38299B2656008AB32D /* GekitaiSo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 26302B50299B2658008AB32D /* Build configuration list for PBXNativeTarget "GenkitaiSo" */;
+			buildConfigurationList = 26302B50299B2658008AB32D /* Build configuration list for PBXNativeTarget "GekitaiSo" */;
 			buildPhases = (
 				EDE1D320D58E1ECF07D29F87 /* [CP] Check Pods Manifest.lock */,
 				26302B35299B2656008AB32D /* Sources */,
@@ -193,9 +193,9 @@
 			);
 			dependencies = (
 			);
-			name = GenkitaiSo;
+			name = GekitaiSo;
 			productName = GenkitaiSo;
-			productReference = 26302B39299B2656008AB32D /* GenkitaiSo.app */;
+			productReference = 26302B39299B2656008AB32D /* GekitaiSo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -213,7 +213,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 26302B34299B2656008AB32D /* Build configuration list for PBXProject "GenkitaiSo" */;
+			buildConfigurationList = 26302B34299B2656008AB32D /* Build configuration list for PBXProject "GekitaiSo" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -226,7 +226,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				26302B38299B2656008AB32D /* GenkitaiSo */,
+				26302B38299B2656008AB32D /* GekitaiSo */,
 			);
 		};
 /* End PBXProject section */
@@ -456,6 +456,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S7LBWA3M99;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Gekitai;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -486,6 +487,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S7LBWA3M99;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Gekitai;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -509,7 +511,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		26302B34299B2656008AB32D /* Build configuration list for PBXProject "GenkitaiSo" */ = {
+		26302B34299B2656008AB32D /* Build configuration list for PBXProject "GekitaiSo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26302B4E299B2658008AB32D /* Debug */,
@@ -518,7 +520,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		26302B50299B2658008AB32D /* Build configuration list for PBXNativeTarget "GenkitaiSo" */ = {
+		26302B50299B2658008AB32D /* Build configuration list for PBXNativeTarget "GekitaiSo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26302B51299B2658008AB32D /* Debug */,
