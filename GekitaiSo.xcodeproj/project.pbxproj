@@ -26,6 +26,12 @@
 		26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B66299B2B72008AB32D /* PieceDelegate.swift */; };
 		26302B6C299BB00B008AB32D /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B6B299BB00B008AB32D /* SocketService.swift */; };
 		26680EE529B28D97005589B8 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26680EE429B28D97005589B8 /* StateView.swift */; };
+		813F470329CB795D00A7AD6A /* game.proto in Sources */ = {isa = PBXBuildFile; fileRef = 813F470229CB795D00A7AD6A /* game.proto */; };
+		817BCBD829CB746800EAC250 /* RPCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBD729CB746800EAC250 /* RPCWrapper.swift */; };
+		817BCBDA29CB748A00EAC250 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBD929CB748A00EAC250 /* ServerService.swift */; };
+		817BCBDC29CB749600EAC250 /* ClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBDB29CB749600EAC250 /* ClientService.swift */; };
+		817BCBDE29CB74AF00EAC250 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBDD29CB74AF00EAC250 /* Provider.swift */; };
+		81B0AA7B29BA765600F05B8C /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = 81B0AA7A29BA765600F05B8C /* GRPC */; };
 		84D5D86A29B62AF400EA5654 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 84D5D86929B62AF400EA5654 /* SocketIO */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +56,11 @@
 		26302B66299B2B72008AB32D /* PieceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceDelegate.swift; sourceTree = "<group>"; };
 		26302B6B299BB00B008AB32D /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		26680EE429B28D97005589B8 /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
+		813F470229CB795D00A7AD6A /* game.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; path = game.proto; sourceTree = "<group>"; };
+		817BCBD729CB746800EAC250 /* RPCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCWrapper.swift; sourceTree = "<group>"; };
+		817BCBD929CB748A00EAC250 /* ServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerService.swift; sourceTree = "<group>"; };
+		817BCBDB29CB749600EAC250 /* ClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientService.swift; sourceTree = "<group>"; };
+		817BCBDD29CB74AF00EAC250 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81B0AA7B29BA765600F05B8C /* GRPC in Frameworks */,
 				84D5D86A29B62AF400EA5654 /* SocketIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +148,12 @@
 		26302B6A299BAFF3008AB32D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				813F470229CB795D00A7AD6A /* game.proto */,
 				26302B6B299BB00B008AB32D /* SocketService.swift */,
+				817BCBD729CB746800EAC250 /* RPCWrapper.swift */,
+				817BCBD929CB748A00EAC250 /* ServerService.swift */,
+				817BCBDB29CB749600EAC250 /* ClientService.swift */,
+				817BCBDD29CB74AF00EAC250 /* Provider.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -180,6 +197,7 @@
 			name = GekitaiSo;
 			packageProductDependencies = (
 				84D5D86929B62AF400EA5654 /* SocketIO */,
+				81B0AA7A29BA765600F05B8C /* GRPC */,
 			);
 			productName = GenkitaiSo;
 			productReference = 26302B39299B2656008AB32D /* GekitaiSo.app */;
@@ -211,6 +229,7 @@
 			mainGroup = 26302B30299B2656008AB32D;
 			packageReferences = (
 				84D5D86829B62AF300EA5654 /* XCRemoteSwiftPackageReference "socket" */,
+				81B0AA7929BA765600F05B8C /* XCRemoteSwiftPackageReference "grpc-swift" */,
 			);
 			productRefGroup = 26302B3A299B2656008AB32D /* Products */;
 			projectDirPath = "";
@@ -243,15 +262,20 @@
 			files = (
 				26302B43299B2656008AB32D /* GameScene.swift in Sources */,
 				26302B45299B2656008AB32D /* GameViewController.swift in Sources */,
+				817BCBD829CB746800EAC250 /* RPCWrapper.swift in Sources */,
 				26302B5A299B2A1E008AB32D /* Index.swift in Sources */,
+				817BCBDE29CB74AF00EAC250 /* Provider.swift in Sources */,
 				26302B62299B2AA7008AB32D /* Message.swift in Sources */,
+				813F470329CB795D00A7AD6A /* game.proto in Sources */,
 				2623A23329AA7BBF00E7C193 /* ChatTableViewCell.swift in Sources */,
+				817BCBDA29CB748A00EAC250 /* ServerService.swift in Sources */,
 				26302B58299B29C4008AB32D /* Piece.swift in Sources */,
 				26302B5C299B2A54008AB32D /* Board.swift in Sources */,
 				26302B5F299B2A98008AB32D /* Chat.swift in Sources */,
 				26680EE529B28D97005589B8 /* StateView.swift in Sources */,
 				26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */,
 				26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */,
+				817BCBDC29CB749600EAC250 /* ClientService.swift in Sources */,
 				26302B3D299B2656008AB32D /* AppDelegate.swift in Sources */,
 				26302B6C299BB00B008AB32D /* SocketService.swift in Sources */,
 				26302B55299B2904008AB32D /* Constants.swift in Sources */,
@@ -480,6 +504,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		81B0AA7929BA765600F05B8C /* XCRemoteSwiftPackageReference "grpc-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/grpc/grpc-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.0;
+			};
+		};
 		84D5D86829B62AF300EA5654 /* XCRemoteSwiftPackageReference "socket" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
@@ -491,6 +523,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		81B0AA7A29BA765600F05B8C /* GRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81B0AA7929BA765600F05B8C /* XCRemoteSwiftPackageReference "grpc-swift" */;
+			productName = GRPC;
+		};
 		84D5D86929B62AF400EA5654 /* SocketIO */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 84D5D86829B62AF300EA5654 /* XCRemoteSwiftPackageReference "socket" */;
