@@ -12,6 +12,7 @@ class GameScene: SKScene {
 
     var board: Board!
     var player: Player = .disconnected
+    let user = UserDefaults.standard.integer(forKey: "number")
 
     override func sceneDidLoad() {
         

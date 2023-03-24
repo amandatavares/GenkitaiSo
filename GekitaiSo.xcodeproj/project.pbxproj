@@ -24,16 +24,15 @@
 		26302B62299B2AA7008AB32D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B61299B2AA7008AB32D /* Message.swift */; };
 		26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B64299B2B50008AB32D /* BoardDelegate.swift */; };
 		26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B66299B2B72008AB32D /* PieceDelegate.swift */; };
-		26302B6C299BB00B008AB32D /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26302B6B299BB00B008AB32D /* SocketService.swift */; };
 		26680EE529B28D97005589B8 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26680EE429B28D97005589B8 /* StateView.swift */; };
 		813F470529CB890100A7AD6A /* Game.proto in Sources */ = {isa = PBXBuildFile; fileRef = 813F470429CB890000A7AD6A /* Game.proto */; };
 		813F470829CB8AA800A7AD6A /* Game.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F470629CB8AA700A7AD6A /* Game.grpc.swift */; };
 		813F470929CB8AA800A7AD6A /* Game.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F470729CB8AA800A7AD6A /* Game.pb.swift */; };
 		813F470F29CBEBB000A7AD6A /* GameDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F470E29CBEBB000A7AD6A /* GameDelegate.swift */; };
 		813F471129CD34FD00A7AD6A /* IPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F471029CD34FC00A7AD6A /* IPManager.swift */; };
+		813F471329CD463900A7AD6A /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F471229CD463900A7AD6A /* Server.swift */; };
 		817BCBD829CB746800EAC250 /* RPCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBD729CB746800EAC250 /* RPCWrapper.swift */; };
-		817BCBDA29CB748A00EAC250 /* ServerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBD929CB748A00EAC250 /* ServerService.swift */; };
-		817BCBDC29CB749600EAC250 /* ClientService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBDB29CB749600EAC250 /* ClientService.swift */; };
+		817BCBDC29CB749600EAC250 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBDB29CB749600EAC250 /* Client.swift */; };
 		817BCBDE29CB74AF00EAC250 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBDD29CB74AF00EAC250 /* Provider.swift */; };
 		81B0AA7B29BA765600F05B8C /* GRPC in Frameworks */ = {isa = PBXBuildFile; productRef = 81B0AA7A29BA765600F05B8C /* GRPC */; };
 		84D5D86A29B62AF400EA5654 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 84D5D86929B62AF400EA5654 /* SocketIO */; };
@@ -58,16 +57,15 @@
 		26302B61299B2AA7008AB32D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		26302B64299B2B50008AB32D /* BoardDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardDelegate.swift; sourceTree = "<group>"; };
 		26302B66299B2B72008AB32D /* PieceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceDelegate.swift; sourceTree = "<group>"; };
-		26302B6B299BB00B008AB32D /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		26680EE429B28D97005589B8 /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
 		813F470429CB890000A7AD6A /* Game.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; path = Game.proto; sourceTree = "<group>"; };
 		813F470629CB8AA700A7AD6A /* Game.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.grpc.swift; sourceTree = "<group>"; };
 		813F470729CB8AA800A7AD6A /* Game.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.pb.swift; sourceTree = "<group>"; };
 		813F470E29CBEBB000A7AD6A /* GameDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDelegate.swift; sourceTree = "<group>"; };
 		813F471029CD34FC00A7AD6A /* IPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPManager.swift; sourceTree = "<group>"; };
+		813F471229CD463900A7AD6A /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		817BCBD729CB746800EAC250 /* RPCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCWrapper.swift; sourceTree = "<group>"; };
-		817BCBD929CB748A00EAC250 /* ServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerService.swift; sourceTree = "<group>"; };
-		817BCBDB29CB749600EAC250 /* ClientService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientService.swift; sourceTree = "<group>"; };
+		817BCBDB29CB749600EAC250 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		817BCBDD29CB74AF00EAC250 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,10 +160,9 @@
 				813F470629CB8AA700A7AD6A /* Game.grpc.swift */,
 				813F470729CB8AA800A7AD6A /* Game.pb.swift */,
 				817BCBD729CB746800EAC250 /* RPCWrapper.swift */,
-				817BCBD929CB748A00EAC250 /* ServerService.swift */,
-				817BCBDB29CB749600EAC250 /* ClientService.swift */,
+				813F471229CD463900A7AD6A /* Server.swift */,
+				817BCBDB29CB749600EAC250 /* Client.swift */,
 				817BCBDD29CB74AF00EAC250 /* Provider.swift */,
-				26302B6B299BB00B008AB32D /* SocketService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -281,7 +278,7 @@
 				813F470829CB8AA800A7AD6A /* Game.grpc.swift in Sources */,
 				26302B62299B2AA7008AB32D /* Message.swift in Sources */,
 				2623A23329AA7BBF00E7C193 /* ChatTableViewCell.swift in Sources */,
-				817BCBDA29CB748A00EAC250 /* ServerService.swift in Sources */,
+				813F471329CD463900A7AD6A /* Server.swift in Sources */,
 				813F470F29CBEBB000A7AD6A /* GameDelegate.swift in Sources */,
 				26302B58299B29C4008AB32D /* Piece.swift in Sources */,
 				26302B5C299B2A54008AB32D /* Board.swift in Sources */,
@@ -289,11 +286,10 @@
 				26680EE529B28D97005589B8 /* StateView.swift in Sources */,
 				26302B65299B2B50008AB32D /* BoardDelegate.swift in Sources */,
 				26302B67299B2B72008AB32D /* PieceDelegate.swift in Sources */,
-				817BCBDC29CB749600EAC250 /* ClientService.swift in Sources */,
+				817BCBDC29CB749600EAC250 /* Client.swift in Sources */,
 				26302B3D299B2656008AB32D /* AppDelegate.swift in Sources */,
 				813F470929CB8AA800A7AD6A /* Game.pb.swift in Sources */,
 				813F471129CD34FD00A7AD6A /* IPManager.swift in Sources */,
-				26302B6C299BB00B008AB32D /* SocketService.swift in Sources */,
 				26302B55299B2904008AB32D /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
