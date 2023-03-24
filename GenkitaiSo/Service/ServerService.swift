@@ -5,43 +5,59 @@
 //  Created by Amanda Tavares on 22/03/23.
 //
 
-//Entender
 import Foundation
 import GRPC
 import NIO
+import Logging
+import SwiftProtobuf
 
-class GekitaiServer {
+class GameServer {
     
-    var port: Int?
-    var isRunning = false
-    var provider = Provider()
-    var onRun: ((Int) -> ())?
+    var ip: String {
+        //"localhost"
+        IPManager.localAddress!
+        //IPManager.globalAddress!
+    }
     
-    func run() {
-        
-        let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-        
+    var serverPort: Int = 0
+    
+    var provider: Provider? = nil
+    
+    var addressDescription: String {
+        "\(self.ip):\(serverPort)"
+    }
+    
+    func run(delegate: GameDelegate, handler: () -> Void) {
+        // Create an event loop group for the server to run on.
+        let group = MultiThreadedEventLoopGroup(numberOfThreads: System.coreCount)
         defer {
             try! group.syncShutdownGracefully()
         }
         
-        let configuration = Server.Configuration(target: .hostAndPort("localhost", 0), eventLoopGroup: group, serviceProviders: [provider])
+        // Create a provider using the features we read.
+        let provider = Provider(delegate: delegate)
         
-        let server = Server.start(configuration: configuration)
+        // Start the server and print its address once it has started.
+        let server = Server.insecure(group: group)
+            .withServiceProviders([provider])
+            .bind(host: ip, port: serverPort)
+
+        self.provider = provider
         
         server.map {
             $0.channel.localAddress
-            }.whenSuccess { address in
-            if let port = address?.port {
-                self.port = port
-                self.isRunning = true
-                self.onRun?(port)
-                print("server started on port \(port)")
+        }.whenSuccess { [weak self] address in
+            DispatchQueue.main.async {
+                self?.serverPort = address!.port!
             }
+            print("🤖 server started on port \(address!.port!)")
         }
+                //print("🤖 client just connected from port \(port)")
         
-        try? server.flatMap{ $0.onClose }.wait()
+        handler()
         
+        // Wait on the server's `onClose` future to stop the program from exiting.
+        _ = try? server.flatMap { $0.onClose }.wait()
     }
     
 }

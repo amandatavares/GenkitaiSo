@@ -1,7 +1,5 @@
 // [START declaration]
 syntax = "proto3";
-option objc_class_prefix = "RTG"; // important for iOS / Xcode
-option objc_class_prefix = "GGS"; // important for iOS / Xcode
 
 import "google/protobuf/timestamp.proto";
 // [END declaration]
@@ -11,21 +9,24 @@ service GameService {
     
     rpc Connect(ConnectionRequest) returns (ConnectionResponse) {} //invite
 	rpc Start(StartRequest) returns (StartResponse) {} //start
-	rpc GameOver(WinnerRequest) returns (GameResult) //end
+	rpc GameOver(WinnerRequest) returns (GameResult) {} //end
 	rpc Move(MoveRequest) returns (NextTurn) {}
-	rpc Message(Message) returns (Message) {}
+	rpc SendMessage(ChatMessage) returns (ChatMessage) {}
 }
 
 //  Connect
 message ConnectionRequest {
-    string name = 1;
+//    string name = 1;
+    string ip = 1;
+    int32 port = 2;
 }
 
 message ConnectionResponse {
     bool success = 1;
+    string description = 2;
 }
 
-// Start
+// Start - needed?
 message StartRequest { }
 
 message StartResponse {
@@ -34,7 +35,7 @@ message StartResponse {
 
 // End game
 message WinnerRequest {
-    string name = 1
+    string name = 1;
 }
 
 message GameResult {
@@ -42,27 +43,20 @@ message GameResult {
     string loser = 2;
 }
 
-// Message
-message Message {
-    string name = 1;
-	string content = 2;
-	google.protobuf.Timestamp currentDateTime = 3;
-}
-
-// Move
+// Move -> modified, generate again
 message MoveRequest {
-    
-    FROM from = 1;
-    TO to = 2;
+    string name = 1
+    FROM from = 2;
+    TO to = 3;
 
     message FROM {
-        double row = 3;
-        double column = 4;
+        double row = 1;
+        double column = 2;
     }
     
     message TO {
-        double row = 5;
-        double column = 6;
+        double row = 1;
+        double column = 2;
     }
 
 }
@@ -71,6 +65,12 @@ message NextTurn {
     string name = 1;
 }
 
+// Message
+message ChatMessage {
+    string name = 1;
+    string content = 2;
+    google.protobuf.Timestamp currentDateTime = 3;
+}
 
 
 
