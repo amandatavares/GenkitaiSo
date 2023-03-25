@@ -72,18 +72,18 @@ class GameViewController: UIViewController {
 
 //        socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
         
-        guard let text = textfield.text else { return }
+        guard let text = textField.text else { return }
         if text != "" {
-            let message = message(sender: player.rawValue, content: text)
+            let message = Message(sender: self.gameScene.player.rawValue, content: text)
             RPCManager.shared.client.send(message) { _ in
                 self.chat.messages.append(message)
                 DispatchQueue.main.async {
-                    self.table.reloadData()
+                    self.chatTableView.reloadData()
                 }
             }
             //service.enviaMensagem(nome: player.rawValue, mensagem: mensagem)
             //rpcManager.client.(nome: player.rawValue, mensagem: mensagem)
-            self.textfield.text?.removeAll()
+            self.textField.text?.removeAll()
         }
         
         self.view.endEditing(true)
@@ -99,9 +99,9 @@ class GameViewController: UIViewController {
             }
         }
         //self.service.newTurn()
-        self.gameScene.newPos = nil
-        self.gameScene.previousPos = nil
-        self.gameScene.movesPices = []
+        self.gameScene.board.newPos = nil
+        self.gameScene.board.previousPos = nil
+        self.gameScene.board.currentMoves = []
         state = .waiting
     }
     
@@ -119,15 +119,15 @@ class GameViewController: UIViewController {
     }
     
     //MARK: - Connection Status Verification
-    func playerIsConnected() -> Bool {
-        if gameScene.player == .disconnected {
-            showAlert(text: "Server is Unavailable", buttonText: "Try Again") { alert in
-                self.socketService.socket.connect()
-            }
-            return false
-        }
-        return true
-    }
+//    func playerIsConnected() -> Bool {
+//        if gameScene.player == .disconnected {
+//            showAlert(text: "Server is Unavailable", buttonText: "Try Again") { alert in
+//                self.socketService.socket.connect()
+//            }
+//            return false
+//        }
+//        return true
+//    }
     
     func showAlert(text: String, buttonText: String = "Yes", handler: @escaping (UIAlertAction) -> Void = { alert in }) {
         let alertController = UIAlertController(title: text, message: "", preferredStyle: .alert)
@@ -142,12 +142,6 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if gameScene.user == 0 {
-            player = .playerBottom
-        } else if user == 1 {
-            gameScene.player = .playerTop
-        }
         
         self.stateMessageLabel.text = GameState.awaitingConnection.rawValue
       
@@ -176,6 +170,13 @@ class GameViewController: UIViewController {
 
         self.gameScene.board.delegate = self
 
+        
+        if gameScene.user == 0 {
+            gameScene.player = .playerBottom
+        } else if gameScene.user == 1 {
+            gameScene.player = .playerTop
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -185,19 +186,19 @@ class GameViewController: UIViewController {
         RPCManager.shared.onMessage { (message) in
             self.chat.messages.append(message)
             DispatchQueue.main.async {
-                self.table.reloadData()
+                self.chatTableView.reloadData()
             }
         }
         
         RPCManager.shared.onMove {
-            self.gameScene.movePiece(originPos: $0.from, newPos: $0.to)
+            self.gameScene.board.movePiece(from: $0.from, to: $0.to)
             self.state = .yourTurn
             
         }
         
         RPCManager.shared.onRestart {
             DispatchQueue.main.async {
-                let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "roomIdentify")
+                let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
                 join.view.frame = self.view.bounds
                 self.view.addSubview(join.view)
                 UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
@@ -237,7 +238,7 @@ class GameViewController: UIViewController {
         RPCManager.shared.client.restart{ _ in }
         
         DispatchQueue.main.async {
-            let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "roomIdentify")
+            let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
             join.view.frame = self.view.bounds
             self.view.addSubview(join.view)
             UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
@@ -275,9 +276,9 @@ extension GameViewController: UITableViewDataSource, UITableViewDelegate {
             cell.nameLabel.text = "Player Top"
         }
         
-//        cell.nameLabel.text = self.chat.messages[indexPath.row].author
+//        cell.nameLabel.text = self.chat.messages[indexPath.row].sender
         cell.messageLabel.text = self.chat.messages[indexPath.row].content
-        cell.timeLabel.text = self.chat.messages[indexPath.row].timestamp
+        cell.timeLabel.text = "xx/xx"
         
 //        let date = self.chat.messages[indexPath.row].timestamp
 //        if let index = (date.range(of: ",")?.upperBound) {
@@ -359,7 +360,7 @@ extension GameViewController: GameDelegate {
     
     func youArePlayingAt(_ team: String) {
 //        self.gameScene.player = Player(rawValue: team) ?? .disconnected
-//        
+//
 //        self.playerNameLabel.text = "You are  "+gameScene.player.rawValue.capitalized
 //        print("👾 You are player \(gameScene.player.rawValue)")
     }
@@ -369,7 +370,8 @@ extension GameViewController: GameDelegate {
 extension GameViewController: BoardDelegate {
     
     func gameOver(winner: Player) {
-        socketService.gameOver(winner: winner)
+        print("Game over")
+//        socketService.gameOver(winner: winner)
     }
     
 }

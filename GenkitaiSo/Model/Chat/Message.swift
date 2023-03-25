@@ -8,7 +8,7 @@
 import Foundation
 
 struct Message: Codable {
-    let timestamp: String
-    let author: String
+//    let timestamp: String
+    let sender: String
     let content: String
 }

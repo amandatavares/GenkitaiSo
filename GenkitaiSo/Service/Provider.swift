@@ -23,7 +23,7 @@ class GekitaiProvider: GameProvider {
     
     var onMove: ((Move) -> ())?
     
-    var onMessage: ((Mensagem) -> ())?
+    var onMessage: ((Message) -> ())?
     
     var interceptors: GameServerInterceptorFactoryProtocol?
     
@@ -79,7 +79,7 @@ class GekitaiProvider: GameProvider {
     }
     
     func message(request: MessageRequest, context: GRPC.StatusOnlyCallContext) -> NIOCore.EventLoopFuture<MessageReply> {
-        if let message = try? JSONDecoder().decode(Mensagem.self, from: request.jsonUTF8Data()) {
+        if let message = try? JSONDecoder().decode(Message.self, from: request.jsonUTF8Data()) {
             self.onMessage?(message)
         }
         let response = MessageReply.with {

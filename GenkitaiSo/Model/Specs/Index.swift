@@ -13,11 +13,11 @@ struct Index: Codable, Equatable {
 }
 
 struct Position: Codable, Equatable {
-    let x: Double
-    let y: Double
+    let row: Double
+    let column: Double
 }
 
-struct Move {
-    var previousPos: Position
-    var newPos: Position
+struct Move: Codable {
+    var from: Position
+    var to: Position
 }

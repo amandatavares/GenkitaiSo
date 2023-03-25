@@ -49,7 +49,7 @@ class RPCManager {
         server.provider.onMove = handler
     }
     
-    public func onMessage(handler: @escaping (Mensagem) -> ()) {
+    public func onMessage(handler: @escaping (Message) -> ()) {
         server.provider.onMessage = handler
     }
     

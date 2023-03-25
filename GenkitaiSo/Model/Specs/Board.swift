@@ -65,11 +65,11 @@ class Board {
         
         // Set pieces positions
         for i in 0..<numberOfPieces {
-            let topPosition = Position(x: 150.0+(inset*Double(i)), y: topY)
+            let topPosition = Position(row: 150.0+(inset*Double(i)), column: topY)
             print(topPosition)
             self.originTopPositions.append(topPosition)
             
-            let bottomPosition = Position(x: 150.0+(inset*Double(i)), y: bottomY)
+            let bottomPosition = Position(row: 150.0+(inset*Double(i)), column: bottomY)
             print(bottomPosition)
             self.originBottomPositions.append(bottomPosition)
 
@@ -78,14 +78,14 @@ class Board {
         // Place pieces 
         for top in self.originTopPositions {
             print(top)
-            let piece = Piece(index: Position(x: top.x, y: top.y), type: .playerTop)
+            let piece = Piece(index: Position(row: top.row, column: top.column), type: .playerTop)
             self.tileMap.addChild(piece.node)
             self.pieces.append(piece)
         }
         
         for bottom in self.originBottomPositions {
             print(bottom)
-            let piece = Piece(index: Position(x: bottom.x, y: bottom.y), type: .playerBottom)
+            let piece = Piece(index: Position(row: bottom.row, column: bottom.column), type: .playerBottom)
             self.tileMap.addChild(piece.node)
             self.pieces.append(piece)
         }
@@ -104,15 +104,15 @@ class Board {
     }
     
     func findPiece(from pos: Position) -> Piece? { 
-        for piece in pieces where piece.node.position.x == pos.x && piece.node.position.y == pos.y {
+        for piece in pieces where piece.node.position.x == pos.row && piece.node.position.y == pos.column {
             return piece
         }
         return nil
     }
     
-    func movePiece(from origin: Position, to new: Position) { //fix it
+    func movePiece(from origin: Position, to new: Position) {
         if let piece = findPiece(from: origin) {
-            piece.node.position = CGPoint(x: new.x, y: new.y)
+            piece.node.position = CGPoint(x: new.row, y: new.column)
         }
     }
     
@@ -125,24 +125,24 @@ class Board {
             //se o node estiver fora do tabuleiro 6x6 (0 ate 5)
         if column < 0 || column > self.numberOfRows-1 || row < 0 || row > self.numberOfRows-1 {
                 for piece in pieces where piece.node == node {
-                    node.position = CGPoint(x: piece.index.x, y: piece.index.y)
-                    self.newPos = Position(x: piece.index.x, y: piece.index.y)
+                    node.position = CGPoint(x: piece.index.row, y: piece.index.column)
+                    self.newPos = Position(row: piece.index.row, column: piece.index.column)
                 }
             } else {
                 // se existir mais que um node na posição, volta para a posição anterior
                 if nodesInCenter.count > 1 && nodesInCenter.contains(node) {
-                    node.position = CGPoint(x: previousPos!.x, y: previousPos!.y)
-                    self.newPos = Position(x: previousPos!.x, y: previousPos!.y)
+                    node.position = CGPoint(x: previousPos!.row, y: previousPos!.column)
+                    self.newPos = Position(row: previousPos!.row, column: previousPos!.column)
                 } else if nodesInCenter.count >= 1 && !nodesInCenter.contains(node) {
-                    node.position = CGPoint(x: previousPos!.x, y: previousPos!.y)
-                    self.newPos = Position(x: previousPos!.x, y: previousPos!.y)
+                    node.position = CGPoint(x: previousPos!.row, y: previousPos!.column)
+                    self.newPos = Position(row: previousPos!.row, column: previousPos!.column)
                 
                 } else {
                     node.position = center
-                    self.newPos = Position(x: center.x, y: center.y)
+                    self.newPos = Position(row: center.x, column: center.y)
                 }
             }
-        self.currentMoves.append(Move(previousPos: self.previousPos!, newPos: self.newPos!))
+        self.currentMoves.append(Move(from: self.previousPos!, to: self.newPos!))
     }
 
     

@@ -112,7 +112,7 @@ class GekitaiClient {
         }
     }
     
-    func send(_ message: Mensagem, onResponse: (Bool) -> ()) {
+    func send(_ message: Message, onResponse: (Bool) -> ()) {
         do {
             let data = try JSONEncoder().encode(message)
             let request = try MessageRequest(jsonUTF8Data: data)
