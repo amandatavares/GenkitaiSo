@@ -29,7 +29,6 @@
 		813F470829CB8AA800A7AD6A /* Game.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F470629CB8AA700A7AD6A /* Game.grpc.swift */; };
 		813F470929CB8AA800A7AD6A /* Game.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F470729CB8AA800A7AD6A /* Game.pb.swift */; };
 		813F470F29CBEBB000A7AD6A /* GameDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F470E29CBEBB000A7AD6A /* GameDelegate.swift */; };
-		813F471129CD34FD00A7AD6A /* IPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F471029CD34FC00A7AD6A /* IPManager.swift */; };
 		813F471329CD463900A7AD6A /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F471229CD463900A7AD6A /* Server.swift */; };
 		813F471529CD4D5500A7AD6A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813F471429CD4D5500A7AD6A /* LoginViewController.swift */; };
 		817BCBD829CB746800EAC250 /* RPCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817BCBD729CB746800EAC250 /* RPCWrapper.swift */; };
@@ -63,7 +62,6 @@
 		813F470629CB8AA700A7AD6A /* Game.grpc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.grpc.swift; sourceTree = "<group>"; };
 		813F470729CB8AA800A7AD6A /* Game.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.pb.swift; sourceTree = "<group>"; };
 		813F470E29CBEBB000A7AD6A /* GameDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDelegate.swift; sourceTree = "<group>"; };
-		813F471029CD34FC00A7AD6A /* IPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPManager.swift; sourceTree = "<group>"; };
 		813F471229CD463900A7AD6A /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		813F471429CD4D5500A7AD6A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		817BCBD729CB746800EAC250 /* RPCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCWrapper.swift; sourceTree = "<group>"; };
@@ -151,7 +149,6 @@
 				26302B66299B2B72008AB32D /* PieceDelegate.swift */,
 				26302B64299B2B50008AB32D /* BoardDelegate.swift */,
 				813F470E29CBEBB000A7AD6A /* GameDelegate.swift */,
-				813F471029CD34FC00A7AD6A /* IPManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -293,7 +290,6 @@
 				817BCBDC29CB749600EAC250 /* Client.swift in Sources */,
 				26302B3D299B2656008AB32D /* AppDelegate.swift in Sources */,
 				813F470929CB8AA800A7AD6A /* Game.pb.swift in Sources */,
-				813F471129CD34FD00A7AD6A /* IPManager.swift in Sources */,
 				26302B55299B2904008AB32D /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

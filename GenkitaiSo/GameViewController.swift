@@ -95,6 +95,7 @@ class GameViewController: UIViewController {
         print("clicked finish turn")
         for move in gameScene.board.currentMoves {
             //self.grpcClient.move(from: move.previousPos, to: move.newPos)
+            print(move)
             RPCManager.shared.client.send(move) { _ in
             }
         }
