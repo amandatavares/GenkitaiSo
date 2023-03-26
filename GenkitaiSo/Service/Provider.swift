@@ -54,6 +54,7 @@ class GekitaiProvider: GameProvider {
     func end(request: EndRequest, context: GRPC.StatusOnlyCallContext) -> NIOCore.EventLoopFuture<EndReply> {
         let winner = request.winner
         self.onEnd?(winner)
+        
         let response = EndReply.with {
             $0.success = true
         }

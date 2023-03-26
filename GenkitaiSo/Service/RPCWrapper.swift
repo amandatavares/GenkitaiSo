@@ -9,9 +9,9 @@ import Foundation
 import GRPC
 import NIO
 
-class RPCManager {
+class RPCWrapper {
     
-    static var shared = RPCManager()
+    static var shared = RPCWrapper()
     
     var client = GekitaiClient()
     var server = GekitaiServer()

@@ -84,7 +84,7 @@ class GameViewController: UIViewController {
         guard let text = textField.text else { return }
         if text != "" {
             let message = Message(sender: self.gameScene.player.rawValue, content: text)
-            RPCManager.shared.client.send(message) { _ in
+            RPCWrapper.shared.client.send(message) { _ in
                 self.chat.messages.append(message)
                 DispatchQueue.main.async {
                     self.chatTableView.reloadData()
@@ -103,7 +103,7 @@ class GameViewController: UIViewController {
         for move in gameScene.board.currentMoves {
             //self.grpcClient.move(from: move.previousPos, to: move.newPos)
             print(move)
-            RPCManager.shared.client.send(move) { _ in
+            RPCWrapper.shared.client.send(move) { _ in
             }
         }
         //self.service.newTurn()
@@ -116,10 +116,9 @@ class GameViewController: UIViewController {
     // Action : User gave up
     @IBAction func didGaveUp(_ sender: Any) {
         print("clicked give up")
-        showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
+        showAlert(text: "Are you sure you want to give up?", buttonText: "Yes, give up", buttonStyle: .destructive) { alert in
             
-            // TODO: Add finish game / game over
-            self.didLose() //should be instantiate as delegate
+            self.end()
         }
     }
     
@@ -134,13 +133,15 @@ class GameViewController: UIViewController {
 //        return true
 //    }
     
-    func showAlert(text: String, buttonText: String = "Yes", handler: @escaping (UIAlertAction) -> Void = { alert in }) {
+    func showAlert(text: String, buttonText: String = "Yes", buttonStyle: UIAlertAction.Style = .default, handler: @escaping (UIAlertAction) -> Void = { alert in }) {
         let alertController = UIAlertController(title: text, message: "", preferredStyle: .alert)
-        alertController.addAction(
-            UIAlertAction(title: buttonText, style: .default, handler: handler)
-        )
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in alertController.dismiss(animated: true) })
         
+        alertController.addAction(
+            UIAlertAction(title: buttonText, style: buttonStyle, handler: handler)
+        )
+        alertController.addAction(
+            UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        )
         self.present(alertController, animated: true, completion: nil)
     }
     
@@ -149,6 +150,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         self.stateMessageLabel.text = GameState.awaitingConnection.rawValue
+        self.playerNameLabel.text = UserDefaults.standard.string(forKey: "name")!
       
         self.customizeViews()
         
@@ -181,6 +183,7 @@ class GameViewController: UIViewController {
         } else if gameScene.user == 1 {
             gameScene.player = .playerTop
         }
+        self.playerNameLabel.text = gameScene.player.rawValue
         
     }
     
@@ -188,27 +191,35 @@ class GameViewController: UIViewController {
         super.viewDidAppear(animated)
         showStateView()
         
-        RPCManager.shared.onMessage { (message) in
+        RPCWrapper.shared.onMessage { (message) in
             self.chat.messages.append(message)
             DispatchQueue.main.async {
                 self.chatTableView.reloadData()
             }
         }
         
-        RPCManager.shared.onMove {
+        RPCWrapper.shared.onMove {
             self.gameScene.board.movePiece(from: $0.from, to: $0.to)
             self.state = .yourTurn
-            
         }
         
-        RPCManager.shared.onRestart {
+        RPCWrapper.shared.onRestart {
             DispatchQueue.main.async {
+                self.view.subviews.forEach({ $0.removeFromSuperview() })
+
                 let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
                 join.view.frame = self.view.bounds
                 self.view.addSubview(join.view)
                 UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
                     join.didMove(toParent: self)
                 }
+            }
+        }
+        
+        // If there's a loser, you are the winner
+        RPCWrapper.shared.onEnd { (winner) in
+            DispatchQueue.main.async {
+                self.didWin()
             }
         }
         
@@ -234,24 +245,6 @@ class GameViewController: UIViewController {
         return true
     }
     
-
-    
-    //MARK: - Restart
-    func restart() {
-        //service.restart()
-        //grpcClient.restart()
-        RPCManager.shared.client.restart{ _ in }
-        
-        DispatchQueue.main.async {
-            let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
-            join.view.frame = self.view.bounds
-            self.view.addSubview(join.view)
-            UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
-                join.didMove(toParent: self)
-            }
-        }
-    }
-    
     func customizeViews() {
         
         self.chatStackView.layer.cornerRadius = 10
@@ -263,7 +256,35 @@ class GameViewController: UIViewController {
         self.chatTableView.separatorColor = UIColor.systemGray6
         
         self.textField.layer.borderColor = UIColor.Game.background.cgColor
+        
     }
+
+    
+    //MARK: - Restart
+    func restart() {
+        RPCWrapper.shared.client.restart{ _ in }
+        
+        DispatchQueue.main.async {
+            let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
+            join.view.frame = self.view.bounds
+            self.view.addSubview(join.view)
+            UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
+                join.didMove(toParent: self)
+            }
+        }
+    }
+    
+    //MARK: - END
+    func end() {
+        // The one who calls end() function is the loser
+        
+        RPCWrapper.shared.client.end { (success) in
+            DispatchQueue.main.async {
+                self.didLose()
+            }
+        }
+    }
+    
 }
 
 //MARK: - TableViewDelegate
@@ -332,16 +353,19 @@ extension GameViewController: GameDelegate {
     }
     
     func didWin() {
-        self.chat.messages.removeAll()
-        state = GameState.youWin
-        self.stateView.removeFromSuperview()
-        self.stateView.label.text = state.rawValue
-        self.view.addSubview(self.stateView)
-        
-        let alert = UIAlertController(title: "You won! 🎉", message: "", preferredStyle: .alert)
-        let exit = UIAlertAction(title: "Play again", style: .default, handler: { _ in self.restart() })
-        alert.addAction(exit)
-        self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.chat.messages.removeAll()
+            
+            self.state = GameState.youWin
+            self.stateView.removeFromSuperview()
+            self.stateView.label.text = ""
+            self.view.addSubview(self.stateView)
+            
+            let alert = UIAlertController(title: "You won! 🎉", message: "", preferredStyle: .alert)
+            let exit = UIAlertAction(title: "Play again", style: .default, handler: { _ in self.restart() })
+            alert.addAction(exit)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 
     func didLose() {
@@ -350,7 +374,7 @@ extension GameViewController: GameDelegate {
             
             self.state = GameState.youLose
             self.stateView.removeFromSuperview()
-            self.stateView.label.text = self.state.rawValue
+            self.stateView.label.text = ""
             self.view.addSubview(self.stateView)
             
             let alert = UIAlertController(title: "You lost! 😭", message: "", preferredStyle: .alert)
@@ -361,15 +385,9 @@ extension GameViewController: GameDelegate {
     }
 //
     func receivedMessage(name: String, msg: String, hour: String) {
-//        self.chat.messages.append(Message(timestamp: hour, author: name, content: msg))
-//        self.chatTableView.reloadData()
     }
     
     func youArePlayingAt(_ team: String) {
-//        self.gameScene.player = Player(rawValue: team) ?? .disconnected
-//
-//        self.playerNameLabel.text = "You are  "+gameScene.player.rawValue.capitalized
-//        print("👾 You are player \(gameScene.player.rawValue)")
     }
     
 }
@@ -378,7 +396,6 @@ extension GameViewController: BoardDelegate {
     
     func gameOver(winner: Player) {
         print("Game over")
-//        socketService.gameOver(winner: winner)
     }
     
 }

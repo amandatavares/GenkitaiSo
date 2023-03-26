@@ -18,13 +18,13 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        RPCManager.shared.run { (port) in
+        RPCWrapper.shared.run { (port) in
             DispatchQueue.main.async {
                 self.codeLabel.text = String(port)
             }
         }
         
-        RPCManager.shared.onStart {
+        RPCWrapper.shared.onStart {
             UserDefaults.standard.set(1, forKey: "number")
             self.start()
         }
@@ -40,14 +40,14 @@ class LoginViewController: UIViewController {
         
         guard let port = Int(codeTextField.text!) else { return }
         
-        RPCManager.shared.client.port = port
+        RPCWrapper.shared.client.port = port
         
-        RPCManager.shared.client.invite(name: name) { (success) in
+        RPCWrapper.shared.client.invite(name: name) { (success) in
             if success {
                 UserDefaults.standard.set(name, forKey: "name")
                 codeTextField.isEnabled = false
-                sender.backgroundColor = .systemPurple
                 sender.setTitle("Connection sucessful", for: .normal)
+                sender.isEnabled = false
                 self.startButton.isEnabled = true
             }
         }
@@ -55,7 +55,7 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func start(_ sender: Any) {
-        RPCManager.shared.client.start { (success) in
+        RPCWrapper.shared.client.start { (success) in
             if success {
                 UserDefaults.standard.set(0, forKey: "number")
                 self.start()

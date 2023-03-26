@@ -10,8 +10,8 @@ import UIKit
 
 enum Player: String {
     case disconnected = ""
-    case playerTop = "playerTop"
-    case playerBottom = "playerBottom"
+    case playerTop = "Yellow"
+    case playerBottom = "Blue"
 }
 
 enum GameResult {
