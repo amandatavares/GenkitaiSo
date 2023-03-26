@@ -26,7 +26,16 @@ class GameViewController: UIViewController {
     @IBOutlet weak var gameView: UIView!
     
     
-    var chat = Chat() //Chat keep the messages
+    var chat = Chat() {
+        didSet {
+            DispatchQueue.main.async {
+                self.chatTableView.reloadData()
+                if !self.chat.messages.isEmpty {
+                    self.chatTableView.scrollToRow(at: IndexPath(row: self.chat.messages.count - 1, section: 0), at: .bottom, animated: true)
+                }
+            }
+        }
+    }//Chat keep the messages
 
     //MARK: - State View Alert
     // When it's opponent's turn, we show this alert
@@ -40,12 +49,14 @@ class GameViewController: UIViewController {
 
     var state: GameState! = .awaitingConnection {
         didSet {
-            self.stateMessageLabel.text = state.rawValue
-            switch state {
-            case .yourTurn:
-                dismissStateView()
-            default:
-                showStateView()
+            DispatchQueue.main.async {
+                self.stateMessageLabel.text = self.state.rawValue
+                switch self.state {
+                case .yourTurn:
+                    self.dismissStateView()
+                default:
+                    self.showStateView()
+                }
             }
         }
     }
@@ -69,8 +80,6 @@ class GameViewController: UIViewController {
     
     // Action: Send message by socket
     @IBAction func sendAction(_ sender: UIButton) {
-
-//        socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
         
         guard let text = textField.text else { return }
         if text != "" {
@@ -81,8 +90,6 @@ class GameViewController: UIViewController {
                     self.chatTableView.reloadData()
                 }
             }
-            //service.enviaMensagem(nome: player.rawValue, mensagem: mensagem)
-            //rpcManager.client.(nome: player.rawValue, mensagem: mensagem)
             self.textField.text?.removeAll()
         }
         
@@ -110,12 +117,9 @@ class GameViewController: UIViewController {
     @IBAction func didGaveUp(_ sender: Any) {
         print("clicked give up")
         showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
-//            self.socketService.giveUp(player: self.gameScene.player.rawValue)
             
             // TODO: Add finish game / game over
             self.didLose() //should be instantiate as delegate
-            self.restart()
-//            self.restart()
         }
     }
     
@@ -341,17 +345,19 @@ extension GameViewController: GameDelegate {
     }
 
     func didLose() {
-        self.chat.messages.removeAll()
-        
-        state = GameState.youLose
-        self.stateView.removeFromSuperview()
-        self.stateView.label.text = state.rawValue
-        self.view.addSubview(self.stateView)
-        
-        let alert = UIAlertController(title: "You lost! 😭", message: "", preferredStyle: .alert)
-        let exit = UIAlertAction(title: "Play again", style: .default, handler: { _ in self.restart() })
-        alert.addAction(exit)
-        self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.chat.messages.removeAll()
+            
+            self.state = GameState.youLose
+            self.stateView.removeFromSuperview()
+            self.stateView.label.text = self.state.rawValue
+            self.view.addSubview(self.stateView)
+            
+            let alert = UIAlertController(title: "You lost! 😭", message: "", preferredStyle: .alert)
+            let exit = UIAlertAction(title: "Play again", style: .default, handler: { _ in self.restart() })
+            alert.addAction(exit)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 //
     func receivedMessage(name: String, msg: String, hour: String) {
