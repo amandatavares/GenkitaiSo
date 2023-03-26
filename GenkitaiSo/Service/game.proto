@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+
+service Game {
+    rpc Invite (InviteRequest) returns (InviteReply) {}
+    rpc Start (StartRequest) returns (StartReply) {}
+    rpc Restart (RestartRequest) returns (RestartReply) {}
+    rpc End (EndRequest) returns (EndReply) {}
+    rpc Quit (QuitRequest) returns (QuitReply) {}
+    rpc Move (MoveRequest) returns (MoveReply) {}
+    rpc Message (MessageRequest) returns (MessageReply) {}
+}
+
+// Invite
+
+message InviteRequest {
+    string name = 1;
+}
+
+message InviteReply {
+    bool success = 1;
+}
+
+// Start
+
+message StartRequest { }
+
+message StartReply {
+    bool success = 1;
+}
+
+// Start
+
+message RestartRequest { }
+
+message RestartReply {
+    bool success = 1;
+}
+
+// End
+
+message EndRequest {
+    string winner = 1;
+}
+
+message EndReply {
+    bool success = 1;
+}
+
+// Quit
+
+message QuitRequest { }
+
+message QuitReply {
+    bool success = 1;
+}
+
+// Move
+
+message MoveRequest {
+    
+    FROM from = 1;
+    TO to = 2;
+
+    message FROM {
+        double row = 3;
+        double column = 4;
+    }
+    
+    message TO {
+        double row = 5;
+        double column = 6;
+    }
+
+}
+
+message MoveReply {
+    bool success = 1;
+}
+
+// Message
+
+message MessageRequest {
+    string sender = 1;
+    string content = 2;
+}
+
+message MessageReply {
+    bool success = 1;
+}

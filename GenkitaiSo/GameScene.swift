@@ -12,6 +12,7 @@ class GameScene: SKScene {
 
     var board: Board!
     var player: Player = .disconnected
+    let user = UserDefaults.standard.integer(forKey: "number")
 
     override func sceneDidLoad() {
         
@@ -30,7 +31,7 @@ class GameScene: SKScene {
             for node in touchedNodes.reversed() {
                 if node.name == "piece" {
                     self.board.selectedNode = node
-                    self.board.previousPos = Position(x: node.position.x, y: node.position.y)
+                    self.board.previousPos = Position(row: node.position.x, column: node.position.y)
                 }
             }
         }

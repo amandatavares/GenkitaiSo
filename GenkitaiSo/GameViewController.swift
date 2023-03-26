@@ -25,8 +25,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var chatStackView: UIStackView!
     @IBOutlet weak var gameView: UIView!
     
-    //MARK: - Socket Service Instatiation
-    let socketService: SocketService = SocketService()
+    
     var chat = Chat() //Chat keep the messages
 
     //MARK: - State View Alert
@@ -70,42 +69,66 @@ class GameViewController: UIViewController {
     
     // Action: Send message by socket
     @IBAction func sendAction(_ sender: UIButton) {
-//        if playerIsConnected() {
-        socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
-        self.textField.text?.removeAll()
+
+//        socketService.sendMessage(author: self.gameScene.player.rawValue, content: self.textField.text ?? "?")
+        
+        guard let text = textField.text else { return }
+        if text != "" {
+            let message = Message(sender: self.gameScene.player.rawValue, content: text)
+            RPCManager.shared.client.send(message) { _ in
+                self.chat.messages.append(message)
+                DispatchQueue.main.async {
+                    self.chatTableView.reloadData()
+                }
+            }
+            //service.enviaMensagem(nome: player.rawValue, mensagem: mensagem)
+            //rpcManager.client.(nome: player.rawValue, mensagem: mensagem)
+            self.textField.text?.removeAll()
+        }
+        
         self.view.endEditing(true)
-//        }
+
     }
     
     // Action: Send moves and define turn through socket
     @IBAction func didFinishedTurn(_ sender: Any) {
         print("clicked finish turn")
         for move in gameScene.board.currentMoves {
-            self.socketService.move(from: move.previousPos, to: move.newPos)
+            //self.grpcClient.move(from: move.previousPos, to: move.newPos)
+            print(move)
+            RPCManager.shared.client.send(move) { _ in
+            }
         }
-        self.socketService.newTurn()
+        //self.service.newTurn()
+        self.gameScene.board.newPos = nil
+        self.gameScene.board.previousPos = nil
+        self.gameScene.board.currentMoves = []
+        state = .waiting
     }
     
     // Action : User gave up
     @IBAction func didGaveUp(_ sender: Any) {
         print("clicked give up")
         showAlert(text: "Are you sure you want to give up?", buttonText: "Yes") { alert in
-            self.socketService.giveUp(player: self.gameScene.player.rawValue)
+//            self.socketService.giveUp(player: self.gameScene.player.rawValue)
+            
+            // TODO: Add finish game / game over
             self.didLose() //should be instantiate as delegate
+            self.restart()
 //            self.restart()
         }
     }
     
     //MARK: - Connection Status Verification
-    func playerIsConnected() -> Bool {
-        if gameScene.player == .disconnected {
-            showAlert(text: "Server is Unavailable", buttonText: "Try Again") { alert in
-                self.socketService.socket.connect()
-            }
-            return false
-        }
-        return true
-    }
+//    func playerIsConnected() -> Bool {
+//        if gameScene.player == .disconnected {
+//            showAlert(text: "Server is Unavailable", buttonText: "Try Again") { alert in
+//                self.socketService.socket.connect()
+//            }
+//            return false
+//        }
+//        return true
+//    }
     
     func showAlert(text: String, buttonText: String = "Yes", handler: @escaping (UIAlertAction) -> Void = { alert in }) {
         let alertController = UIAlertController(title: text, message: "", preferredStyle: .alert)
@@ -128,8 +151,6 @@ class GameViewController: UIViewController {
         self.chatTableView.dataSource = self
         self.chatTableView.delegate = self
         
-        self.socketService.delegate = self
-        
         self.textField.delegate = self
         
         // Load the SKScene from 'GameScene.sks'
@@ -150,6 +171,43 @@ class GameViewController: UIViewController {
 
         self.gameScene.board.delegate = self
 
+        
+        if gameScene.user == 0 {
+            gameScene.player = .playerBottom
+        } else if gameScene.user == 1 {
+            gameScene.player = .playerTop
+        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showStateView()
+        
+        RPCManager.shared.onMessage { (message) in
+            self.chat.messages.append(message)
+            DispatchQueue.main.async {
+                self.chatTableView.reloadData()
+            }
+        }
+        
+        RPCManager.shared.onMove {
+            self.gameScene.board.movePiece(from: $0.from, to: $0.to)
+            self.state = .yourTurn
+            
+        }
+        
+        RPCManager.shared.onRestart {
+            DispatchQueue.main.async {
+                let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
+                join.view.frame = self.view.bounds
+                self.view.addSubview(join.view)
+                UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
+                    join.didMove(toParent: self)
+                }
+            }
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -176,9 +234,18 @@ class GameViewController: UIViewController {
     
     //MARK: - Restart
     func restart() {
-        socketService.restart()
-        viewDidLoad()
-        viewDidAppear(true)
+        //service.restart()
+        //grpcClient.restart()
+        RPCManager.shared.client.restart{ _ in }
+        
+        DispatchQueue.main.async {
+            let join = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginRoom")
+            join.view.frame = self.view.bounds
+            self.view.addSubview(join.view)
+            UIView.transition(from: self.view, to: join.view, duration: 0.25, options: .transitionCrossDissolve) { _ in
+                join.didMove(toParent: self)
+            }
+        }
     }
     
     func customizeViews() {
@@ -203,16 +270,24 @@ extension GameViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatTableView.dequeueReusableCell(withIdentifier: "chatCell", for: indexPath) as! ChatTableViewCell
-        cell.nameLabel.text = self.chat.messages[indexPath.row].author
-        cell.messageLabel.text = self.chat.messages[indexPath.row].content
         
-        let date = self.chat.messages[indexPath.row].timestamp
-        if let index = (date.range(of: ",")?.upperBound) {
-            let time = String(date.suffix(from: index))
-            cell.timeLabel.text = time
+        if self.chat.messages[indexPath.row].sender == "playerBottom" {
+            cell.nameLabel.text = "Player Bottom"
         } else {
-            cell.timeLabel.text = self.chat.messages[indexPath.row].timestamp
+            cell.nameLabel.text = "Player Top"
         }
+        
+//        cell.nameLabel.text = self.chat.messages[indexPath.row].sender
+        cell.messageLabel.text = self.chat.messages[indexPath.row].content
+        cell.timeLabel.text = "xx/xx"
+        
+//        let date = self.chat.messages[indexPath.row].timestamp
+//        if let index = (date.range(of: ",")?.upperBound) {
+//            let time = String(date.suffix(from: index))
+//            cell.timeLabel.text = time
+//        } else {
+//            cell.timeLabel.text = self.chat.messages[indexPath.row].timestamp
+//        }
 
         return cell
     }
@@ -253,29 +328,42 @@ extension GameViewController: GameDelegate {
     }
     
     func didWin() {
+        self.chat.messages.removeAll()
         state = GameState.youWin
         self.stateView.removeFromSuperview()
         self.stateView.label.text = state.rawValue
         self.view.addSubview(self.stateView)
+        
+        let alert = UIAlertController(title: "You won! 🎉", message: "", preferredStyle: .alert)
+        let exit = UIAlertAction(title: "Play again", style: .default, handler: { _ in self.restart() })
+        alert.addAction(exit)
+        self.present(alert, animated: true, completion: nil)
     }
 
     func didLose() {
+        self.chat.messages.removeAll()
+        
         state = GameState.youLose
         self.stateView.removeFromSuperview()
         self.stateView.label.text = state.rawValue
         self.view.addSubview(self.stateView)
+        
+        let alert = UIAlertController(title: "You lost! 😭", message: "", preferredStyle: .alert)
+        let exit = UIAlertAction(title: "Play again", style: .default, handler: { _ in self.restart() })
+        alert.addAction(exit)
+        self.present(alert, animated: true, completion: nil)
     }
 //
     func receivedMessage(name: String, msg: String, hour: String) {
-        self.chat.messages.append(Message(timestamp: hour, author: name, content: msg))
-        self.chatTableView.reloadData()
+//        self.chat.messages.append(Message(timestamp: hour, author: name, content: msg))
+//        self.chatTableView.reloadData()
     }
     
     func youArePlayingAt(_ team: String) {
-        self.gameScene.player = Player(rawValue: team) ?? .disconnected
-        
-        self.playerNameLabel.text = "You are  "+gameScene.player.rawValue.capitalized
-        print("👾 You are player \(gameScene.player.rawValue)")
+//        self.gameScene.player = Player(rawValue: team) ?? .disconnected
+//
+//        self.playerNameLabel.text = "You are  "+gameScene.player.rawValue.capitalized
+//        print("👾 You are player \(gameScene.player.rawValue)")
     }
     
 }
@@ -283,7 +371,8 @@ extension GameViewController: GameDelegate {
 extension GameViewController: BoardDelegate {
     
     func gameOver(winner: Player) {
-        socketService.gameOver(winner: winner)
+        print("Game over")
+//        socketService.gameOver(winner: winner)
     }
     
 }

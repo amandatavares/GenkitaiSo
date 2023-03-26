@@ -24,7 +24,7 @@ class Piece {
         
         // Customize piece
         let piece = SKShapeNode(circleOfRadius: 20)
-        piece.position = CGPoint(x: index.x, y: index.y)
+        piece.position = CGPoint(x: index.row, y: index.column)
         piece.name = "piece"
         
         if type == .playerBottom {
